@@ -1,0 +1,34 @@
+// This File is imported last, and will override other styles in the cascade
+// Add styles here to make changes without digging in too much
+
+// Custom font-size
+body {
+  font-size: 1.0em;
+  header hgroup h1 a{
+    font-size: 2.2em;
+    }
+  header hgroup h2 {
+    margin-left: 150px;
+    font-size: 1em;
+  }
+}
+.main-navigation li a {
+  font-size: 1.5em;
+  font-family: 'Underdog', cursive;
+}
+article {
+  h1 {
+    a {
+      font-size: 1.2em;
+    }
+  }
+  ul {
+    list-style: none;
+  }
+}
+body > header h1 {
+  font-size: 1.0em;
+  line-height: .8em;
+  margin-bottom: 0.6667em;
+}
+

@@ -2,12 +2,12 @@
 #      Main Configs       #
 # ----------------------- #
 
-url: http://yoursite.com
-title: My Octopress Blog
-subtitle: A blogging framework for hackers.
-author: Your Name
+url: http://xiongbo.github.com
+title: xiongbo.ME
+subtitle: The Pseudo-programmer's Lost Realm
+author: xiongbo
 simple_search: http://google.com/search
-description:
+description: coding-project-thinking-life
 
 # Default date format is "ordinal" (resulting in "July 22nd 2007")
 # You can customize the format as defined in
@@ -19,7 +19,7 @@ date_format: "ordinal"
 subscribe_rss: /atom.xml
 subscribe_email:
 # RSS feeds can list your email address if you like
-email:
+email: xiongbo027@gmail.com
 
 # ----------------------- #
 #    Jekyll & Plugins     #
@@ -89,8 +89,8 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name:
-disqus_show_comment_count: false
+disqus_short_name: xiongbo027
+disqus_show_comment_count: true
 
 # Google Analytics
 google_analytics_tracking_id:
