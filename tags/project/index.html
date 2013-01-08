@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Project | xiongbo.ME</title>
+  <title>project | xiongbo.ME</title>
   <meta name="author" content="xiongbo">
   
   
@@ -38,7 +38,7 @@
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
 
-<h2 class="archive-title tag">Project</h2>
+<h2 class="archive-title tag">project</h2>
 
 
   
@@ -48,147 +48,27 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2012-05-17T00:00:00.000Z"><a href="/2012/05/17/2012-05-17-env-create/">May 17, 2012</a></time>
+        <time datetime="2012-07-05T00:00:00.000Z"><a href="/2012/07/05/2012-07-05-mongodb-custom-form/">Jul 5, 2012</a></time>
       
       
   
-    <h1 class="title"><a href="/2012/05/17/2012-05-17-env-create/">linux虚拟机上的rails环境配置</a></h1>
+    <h1 class="title"><a href="/2012/07/05/2012-07-05-mongodb-custom-form/">基于mongodb的自定义表单实现思考</a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>下载LMDE xcfe版的linux，并通过vmware创建虚拟机。
+        <h4>如何通过mongoid构建表单的数据结构</h4>
+<p>通过mongoid提供的继承行为，可以有效的表现表单的字段，我的想法如下，这样各类字段不仅能作为XboForm的嵌入文档，同时也可以满足不同字段的个性化信息，如果不使用继承，就只能在模型中包括所有可能的字段属性
 
 </p>
-<p>在终端下执行以下命令安装rvm：
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div><div class="line-number">15</div><div class="line-number">16</div><div class="line-number">17</div><div class="line-number">18</div><div class="line-number">19</div><div class="line-number">20</div><div class="line-number">21</div><div class="line-number">22</div><div class="line-number">23</div><div class="line-number">24</div><div class="line-number">25</div><div class="line-number">26</div></code></pre></td><td class="code"><pre><code><div class="line"> </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">XboField</span></span></div><div class="line">  <span class="keyword">include</span> <span class="constant">Mongoid::Document</span></div><div class="line">  <span class="keyword">include</span> <span class="constant">Mongoid::Timestamps</span> </div><div class="line">  field <span class="symbol">:name</span></div><div class="line">  field <span class="symbol">:label</span></div><div class="line">  field <span class="symbol">:help_text</span></div><div class="line">  field <span class="symbol">:required</span>, <span class="symbol">type:</span> <span class="constant">Boolean</span></div><div class="line">  field <span class="symbol">:type</span></div><div class="line">  validates_presence_of <span class="symbol">:name</span> </div><div class="line">  embedded_in <span class="symbol">:xbo_form</span> </div><div class="line"><span class="keyword">end</span></div><br><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">XboString</span> <span class="inheritance">&lt; <span class="parent">XboField</span></span></span></div><div class="line">  field <span class="symbol">:max_length</span>, <span class="symbol">type:</span> <span class="constant">Integer</span></div><div class="line"><span class="keyword">end</span></div><br><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">XboEmail</span> <span class="inheritance">&lt; <span class="parent">XboField</span></span></span></div><div class="line"><span class="keyword">end</span></div><br><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">XboSelect</span> <span class="inheritance">&lt; <span class="parent">XboField</span></span></span></div><div class="line"><span class="keyword">end</span></div><br><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">XboTextarea</span> <span class="inheritance">&lt; <span class="parent">XboField</span></span></span></div><div class="line">  field <span class="symbol">:word_limit</span>, <span class="symbol">type:</span> <span class="constant">Integer</span></div><div class="line"><span class="keyword">end</span></div></code></pre></td></tr></table></figure>
+
+<h4>编辑表单字段的时候，如何表示不同的表单字段呢？</h4>
+<p>可以通过rails中的fields_for在同一个提交表单中表现不同的字段项，需要注意的是由于各个字段作为内嵌文档是以数组的形式保存的，不能采用形如rails guide中的a_from.b_fields.text_field形式，而是要先通过build方法生成实例，再进行使用，以email字段为例：
 
 </p>
-<pre><code><div class="line">bash &lt; <span class="xml"><span class="tag">&lt;<span class="title">(curl</span> <span class="attribute">-s</span> <span class="attribute">https:</span>//<span class="attribute">raw.github.com</span>/<span class="attribute">wayneeseguin</span>/<span class="attribute">rvm</span>/<span class="attribute">master</span>/<span class="attribute">binscripts</span>/<span class="attribute">rvm-installer</span> )</span></div></code></pre>
-<p>将以下脚本追加到当前用户主目录下的.bashrc文件:
-
-</p>
-<pre><code><div class="line"><span class="string">[[ -s "$HOME/.rvm/scripts/rvrm" ]]</span> &amp;&amp; . <span class="string">"$HOME/.rvm/scripts/rvm"</span></div></code></pre>
-<p>通过<code>rvm 1.9.3</code>安装ruby
-
-</p>
-<p>安装过程中遇到无法读取zlib和openssl的问题，可以通过以下方式解决：
-
-</p>
-<pre><code><div class="line"><span class="comment">rvm</span> <span class="comment">pkg</span> <span class="comment">install</span> <span class="comment">zlib</span></div><div class="line"><span class="comment">rvm</span> <span class="comment">pkg</span> <span class="comment">install</span> <span class="comment">openssl</span></div><div class="line"><span class="comment">rvm</span> <span class="comment">remove</span> <span class="comment">1</span>.<span class="comment">9</span>.<span class="comment">3</span></div><div class="line"><span class="comment">rvm</span> <span class="comment">install</span> <span class="comment">1</span>.<span class="comment">9</span>.<span class="comment">3</span> <span class="literal">-</span><span class="comment">C</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">with</span>-<span class="comment">openssl</span>-<span class="comment">dir=$HOME/</span>.<span class="comment">rvm/usr</span>,<span class="literal">-</span><span class="literal">-</span><span class="comment">with</span>-<span class="comment">iconv</span>-<span class="comment">dir=$HOME/</span>.<span class="comment">rvm/usr</div></code></pre>
-<p>通过<code>gem install rails -v 3.2.3</code>安装rails
-
-</p>
-<p>接着又遇到了无法安装sqlite3的问题，可以通过如下的方式解决<code>apt-get install libsqlite3-dev</code>
-
-</p>
-<p>通过以下页面安装node.js<a href="https://gist.github.com/579814">https://gist.github.com/579814</a>
-
-</p>
-<p>期间遇到了<code>Checking for library dl  : not found</code>的问题，可以通过 <code>sudo apt-get install libcurl4-openssl-dev</code>进行解决
-
-</p>
-<p>通过<code>node -v</code>和<code>npm -v</code>检查是否安装正确
-
-</p>
-<p>通过<code>npm install coffee-script</code>安装coffeescript</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-  
-
-  <nav id="pagination">
-  
-  
-  <div class="clearfix"></div>
-</nav>
-</div></div>
-    <aside id="sidebar" class="alignright">
-<div class="search">
-  <form action="http://google.com/search" method="get" accept-charset="utf-8">
-    <input type="text" name="q" results="0" placeholder="Search">
-    <input type="hidden" name="q" value="site:xiongbo.me">
-  </form>
-</div>
-
-
-
-
-<div class="widget tag">
-  <h3 class="title">Tags</h3>
-  <ul class="entry">
-  
-    <li><a href="/tags/Project/">Project</a><small>1</small></li>
-  
-    <li><a href="/tags/Rails-Recipes/">Rails-Recipes</a><small>3</small></li>
-  
-    <li><a href="/tags/blog/">blog</a><small>1</small></li>
-  
-    <li><a href="/tags/design/">design</a><small>1</small></li>
-  
-    <li><a href="/tags/project/">project</a><small>1</small></li>
-  
-    <li><a href="/tags/reading-notes/">reading-notes</a><small>3</small></li>
-  
-    <li><a href="/tags/summary/">summary</a><small>3</small></li>
-  
-    <li><a href="/tags/tools/">tools</a><small>1</small></li>
-  
-    <li><a href="/tags/translate/">translate</a><small>3</small></li>
-  
-  </ul>
-</div>
-
-
-
-</aside>
-    <div class="clearfix"></div>
-  </div>
-  <footer id="footer" class="inner"><div class="alignleft">
-  
-  &copy; 2013 xiongbo
-  
-</div>
-<div class="clearfix"></div></footer>
-  <script src="/js/jquery.imagesloaded.min.js"></script>
-<script src="/js/gallery.js"></script>
-
-
-<script type="text/javascript">
-var disqus_shortname = 'xiongbo';
-
-(function(){
-  var dsq = document.createElement('script');
-  dsq.type = 'text/javascript';
-  dsq.async = true;
-  dsq.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
-  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-}());
-</script>
-
-
-
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-<script type="text/javascript">
-(function($){
-  $('.fancybox').fancybox();
-})(jQuery);
-</script>
-
-</body>
-</html>f| %&gt;</div><div class="line">  &lt;%= f.label <span class="string">'名称'</span> %&gt;</div><div class="line">  &lt;%= f.text_field <span class="symbol">:name</span> %&gt;</div><br><div class="line">  &lt;%= fields_for xbo_email <span class="keyword">do</span> |xbo_email| %&gt;</div><div class="line">    &lt;%= xbo_email.label <span class="string">'字段名称：'</span> %&gt;</div><div class="line">    &lt;%= xbo_email.text_field <span class="symbol">:name</span> %&gt;</div><div class="line">    &lt;%= xbo_email.label <span class="string">'字段标签：'</span> %&gt;</div><div class="line">    &lt;%= xbo_email.text_field <span class="symbol">:label</span> %&gt;</div><div class="line">  &lt;% <span class="keyword">end</span> %&gt; </div><div class="line">&lt;% <span class="keyword">end</span> %&gt;</div></code></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div></code></pre></td><td class="code"><pre><code><div class="line">    </div><div class="line">&lt;% xbo_email = <span class="variable">@xbo_form</span>.xbo_fields.build({},<span class="constant">XboEmail</span>) %&gt;</div><div class="line">&lt;%= form_for <span class="variable">@xbo_form</span>, <span class="symbol">url:</span> xbo_forms_path <span class="keyword">do</span> |f| %&gt;</div><div class="line">  &lt;%= f.label <span class="string">'名称'</span> %&gt;</div><div class="line">  &lt;%= f.text_field <span class="symbol">:name</span> %&gt;</div><br><div class="line">  &lt;%= fields_for xbo_email <span class="keyword">do</span> |xbo_email| %&gt;</div><div class="line">    &lt;%= xbo_email.label <span class="string">'字段名称：'</span> %&gt;</div><div class="line">    &lt;%= xbo_email.text_field <span class="symbol">:name</span> %&gt;</div><div class="line">    &lt;%= xbo_email.label <span class="string">'字段标签：'</span> %&gt;</div><div class="line">    &lt;%= xbo_email.text_field <span class="symbol">:label</span> %&gt;</div><div class="line">  &lt;% <span class="keyword">end</span> %&gt; </div><div class="line">&lt;% <span class="keyword">end</span> %&gt;</div></code></pre></td></tr></table></figure>
 
 <p>这样，当提交表单的时候，就会产生形如以下的参数形式：
 
