@@ -1,0 +1,219 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Google App Engine系列：准备 | xiongbo.ME</title>
+  <meta name="author" content="xiongbo">
+  
+  <meta name="description" content="（本文译自：http://tutorialzine.com/2011/01/getting-started-with-google-app-engine/） 
+
+
+在第一节中，你将了解这个平台以及如何在平台上开发应用。通过这个系列，我们将通过Python和Jquery创建一个功能齐全的web应用，该">
+  
+  
+  <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1">
+
+  <meta property="og:title" content="Google App Engine系列：准备"/>
+  <meta property="og:site_name" content="xiongbo.ME"/>
+
+  <link rel="alternate" href="/atom.xml" title="xiongbo.ME" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">xiongbo.ME</a></h1>
+  <h2><a href="/">project code and simple life</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2012-05-13T00:00:00.000Z"><a href="/2012/05/13/2011-05-13-google-app-engine-1/">May 13, 2012</a></time>
+      
+      
+  
+    <h1 class="title">Google App Engine系列：准备</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>（本文译自：<a href="http://tutorialzine.com/2011/01/getting-started-with-google-app-engine/">http://tutorialzine.com/2011/01/getting-started-with-google-app-engine/</a>） 
+
+</p>
+<p>在第一节中，你将了解这个平台以及如何在平台上开发应用。通过这个系列，我们将通过Python和Jquery创建一个功能齐全的web应用，该应用能够监控你网站的性能，并且记录停机时间（downtime). 什么是Google App Engine App Engine是一个用来提供开发和运行环境的平台。这意味着快速、高可靠性、以及可扩展性。你只需要关心你的代码，并且确信google能够搞定其他的一切：） 并且这项服务还有一点好处，他提供了500万的pv，不过如果超出，你需要为此付一定的费用。 你可以采用java或者python来创建web应用。
+
+</p>
+<p>在本系列中，我们将采用python2.5。App Engine提供了一些基于数据存储、缓存、进程等的api，你可以在你的项目中使用它们。App Engine 为这些服务提供的每日配额足够我们这个系列应用的使用。 以下的这些资源将帮助你更好的了解这个平台。在开发仪表板的时候，我始终开着它们： App Engine getting started guide App Engine documentation for Python Python tutorial for beginners Python 2.5.2 documentation 准备开始 
+
+</p>
+<p>第一步：在Google App Engine上注册。如果你已经有帐号了，请登录。 
+<img src="http://cdn.tutorialzine.com/wp-content/uploads/2011/01/getting-started-google-appengine.jpg" alt="p1">
+
+</p>
+<p>第二步，请安装python2.5，并下载App Engine SDK。SDK包括一个和App Engine类似的开发环境，以及一个用于发布应用的程序（App Launcher）。这意味着你可以在你的本地环境中发布web应用，并在适合的时候部署到App Engine。 
+
+</p>
+<p><img src="http://cdn.tutorialzine.com/wp-content/uploads/2011/01/app-engine-launcher.jpg" alt="p2">
+
+</p>
+<p>使用App Launcher你可以随时启动/停止，以及发布你的应用程序。并通过localhost进行访问。 
+
+</p>
+<p>点击“Run”将启动web服务器，它提供了和App Engine相同的运行环境。
+
+</p>
+<p>点击“Browse“将在你的默认浏览器中打开你的项目。
+
+</p>
+<p>“SDK Console”提供数据库的综合管理（即我们的“仪表板”将要存储数据的位置）。
+
+</p>
+<p>“Deploy”将在Appspot.com上发布并建立你的web应用。 
+
+</p>
+<p>建立你自己的仪表版 我当然不想直到系列结束你们都一直这样干看着，所以你现在应该马上建立你自己的版本，并且亲身感受一下。以下是你需要做的： 
+
+</p>
+<p>打开appengine.google.com，创建新的应用。第一次创建的时候，你需要短信确认。然后，你可以为你的应用命名。 下载“仪表版”的源码，并进行解压。 打开“App Launcher，通过“File&gt;Add Existing Application“导入这个应用。 
+
+</p>
+<p>完成以上的步骤，请用编辑器打开“app.yaml&quot;文件，修改应用标识符（your-application-identifier） application: your-application-identifier version: 1 runtime: python api_version: 接下来，打开&quot;config/config.py&quot;，修改你的应用名称，域名和搜索字符。 scriptTitle = &quot;Your Application Title&quot; fetchURL = &quot;<a href="http://domain-to-be-checked.com/">http://domain-to-be-checked.com/</a>&quot; searchString = &quot;WordInThePageText&quot; 搜索字符串必须是你的主页中存在的。比如在“仪表版”的例子中，我使用了“Tutorialzine“，这串字符的存在将告知你的 脚本：页面已经成功获取。（这段话有点不太懂是什么意思） 最后，你点击“Deploy”，就可以将你的应用部署到你的appspot.com的域名下。你可以对你的应用绑定其他的域名。
+
+</p>
+<p>现在你已经拥有了一个正常运行的“仪表版”，接下来我们将开始实战了！</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/translate/">translate</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+<div class="search">
+  <form action="http://google.com/search" method="get" accept-charset="utf-8">
+    <input type="text" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:xiongbo.me">
+  </form>
+</div>
+
+
+
+
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Project/">Project</a><small>1</small></li>
+  
+    <li><a href="/tags/Rails-Recipes/">Rails-Recipes</a><small>3</small></li>
+  
+    <li><a href="/tags/design/">design</a><small>1</small></li>
+  
+    <li><a href="/tags/project/">project</a><small>1</small></li>
+  
+    <li><a href="/tags/reading-notes/">reading-notes</a><small>3</small></li>
+  
+    <li><a href="/tags/summary/">summary</a><small>3</small></li>
+  
+    <li><a href="/tags/translate/">translate</a><small>3</small></li>
+  
+  </ul>
+</div>
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 xiongbo
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'xiongbo';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

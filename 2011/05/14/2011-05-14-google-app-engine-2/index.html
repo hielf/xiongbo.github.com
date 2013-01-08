@@ -1,0 +1,202 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Google App Engine系列：组织你的项目 | xiongbo.ME</title>
+  <meta name="author" content="xiongbo">
+  
+  <meta name="description" content="在这个系列的第二部分，我们将展示项目的目录结构并创建必须的配置文件。 
+
+
+目录结构 每一个App Engine应用根目录都必须存在一些配置文件。在我们的例子中是app.yame、index.yaml和cron.yaml。其他的目录结构随意。 清晰起见，“仪表版”应用的目录结构如下：
+
+
+
+
+
+一些">
+  
+  
+  <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1">
+
+  <meta property="og:title" content="Google App Engine系列：组织你的项目"/>
+  <meta property="og:site_name" content="xiongbo.ME"/>
+
+  <link rel="alternate" href="/atom.xml" title="xiongbo.ME" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">xiongbo.ME</a></h1>
+  <h2><a href="/">project code and simple life</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2011-05-14T00:00:00.000Z"><a href="/2011/05/14/2011-05-14-google-app-engine-2/">May 14, 2011</a></time>
+      
+      
+  
+    <h1 class="title">Google App Engine系列：组织你的项目</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>在这个系列的第二部分，我们将展示项目的目录结构并创建必须的配置文件。 
+
+</p>
+<p>目录结构 每一个App Engine应用根目录都必须存在一些配置文件。在我们的例子中是app.yame、index.yaml和cron.yaml。其他的目录结构随意。 清晰起见，“仪表版”应用的目录结构如下：
+
+</p>
+<p><img src="http://cdn.tutorialzine.com/wp-content/uploads/2011/02/directory-structure-app-engine-application.jpg" alt="p1">
+
+</p>
+<p>一些文件夹的用途如下： “assets”包括图片、样式表以及脚本文件； “config”包括一个含有基本配置选项的python文件，内容包括需要获取的url地址、应用的名称等。这个文件是独立于App Engine的yaml文件的； “model”、“view”、“controller”文件夹是按照mvc架构创建的python源文件； 当有新的request请求时，main.py文件是首先被访问的。通过它将各个不同的请求发送到相应的控制器，我们将在下一部分进行讲解。 配置文件 就像你在上一篇中看到的，当发布你自己的“运行时间仪表版”的时候，需要编辑一些文件。这些是App Engine的配置文件，用于定义你的应用语言，标识符以及版本信息。 这些配置信息采用yaml文件格式。这种格式的设计是用来处理一些简单数据的序列化，以及用来表示一些程序语言中通常的数据格式，例如：数字、数组、字符串、数值等等，以便更适合存储配置数据。 
+
+</p>
+<pre><code><div class="line">app.yaml</div><div class="line"><span class="method">application:</span> tutorialzine-dashboard </div><div class="line"><span class="method">version:</span> <span class="number">1</span> </div><div class="line"><span class="method">runtime:</span> python </div><div class="line"><span class="method">api_version:</span> <span class="number">1</span>  </div><div class="line"><span class="method">builtins:</span> - </div><div class="line"><span class="method">datastore_admin:</span> on  </div><div class="line"><span class="method">handlers:</span>  - <span class="method">url:</span> /assets   </div><div class="line"><span class="method">static_dir:</span> assets  - <span class="method">url:</span> /favicon.ico   </div><div class="line"><span class="method">static_files:</span> assets/img/favicon.ico   </div><div class="line"><span class="method">upload:</span> assets/img/favicon.ico  - <span class="method">url:</span> /crons/.*   </div><div class="line"><span class="method">script:</span> main.py   <span class="method">login:</span> admin  - <span class="method">url:</span> /generate-test-data/   </div><div class="line"><span class="method">script:</span> main.py   <span class="method">login:</span> admin  - <span class="method">url:</span> .*   <span class="method">script:</span> main.py</div></code></pre>
+<p>app.yaml是你应用程序主要的配置文件。当你创建新的应用的时候，app engine launcher会自动帮你创建这个文件。你可以从这里了解更多。 头两行包含了应用的标识符和版本。标识符用来指向你在appengine.google.com上创建的应用。App Engine通过版本属性管理应用的多个版本。通过控制面板，你能够随时发布或者很容易的回滚到以前的版本。 builtins指令可以使你在App Engine控制面板中启用数据存储管理，方便检测和删除数据。 最后是handlers，可以通过正则表达式映射到对应的脚本处理程序。你需要通过“static_files”或者“static_dir”指定你的静态文件地址。在上面的代码中可以看到我指定了所有访问dashboard.tutorialzine.com/assets的请求都指向到了assets目录。 你也可以选择性的指定某些地址只有应用管理员能够访问。在上面我使用这个选项指定/ crons / URL只有这个应用程序管理员和cron服务能够访问,以防止有人触发cron脚本。
+
+</p>
+<p><img src="http://cdn.tutorialzine.com/wp-content/uploads/2011/02/uptime-dashboard-app-engine.jpg" alt="p2">
+
+</p>
+<pre><code><div class="line">crons.yaml</div><div class="line">- <span class="method">description:</span> <span class="class">Five</span> minute ping   <span class="method">url:</span> /crons/<span class="number">5</span>min/   <span class="method">schedule:</span> every <span class="number">5</span> minutes </div><div class="line">- <span class="method">description:</span> <span class="class">Daily</span> averages   <span class="method">url:</span> /crons/<span class="number">1</span>day/   <span class="method">schedule:</span> every day <span class="number">00</span>:<span class="number">00</span></div></code></pre>
+<p>crons.yaml配置了cron服务。上面的代码告知服务每隔5分钟执行一次/crons/5min，每天午夜执行一次/crons/1day/。这些地址通过正则表达式精确的匹配http请求，这意味着即使执行特定地址你也不需要任何特殊的准备（meaning that you do not need any special preparations to execute a certain address from cron）。 index.yaml是由app launcher自动创建的，你可以在里面定义数据存储所需要使用的索引。索引非常重要，因为它可以加快你应用的查询速度，这也是为什么简单查询也会自动创建他们。所幸我们的应用非常简单，不需要修改index.yaml。 这样我们就成功的配置了新的app engine应用了。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/translate/">translate</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+<div class="search">
+  <form action="http://google.com/search" method="get" accept-charset="utf-8">
+    <input type="text" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:xiongbo.me">
+  </form>
+</div>
+
+
+
+
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Project/">Project</a><small>1</small></li>
+  
+    <li><a href="/tags/Rails-Recipes/">Rails-Recipes</a><small>3</small></li>
+  
+    <li><a href="/tags/design/">design</a><small>1</small></li>
+  
+    <li><a href="/tags/project/">project</a><small>1</small></li>
+  
+    <li><a href="/tags/reading-notes/">reading-notes</a><small>3</small></li>
+  
+    <li><a href="/tags/summary/">summary</a><small>3</small></li>
+  
+    <li><a href="/tags/translate/">translate</a><small>3</small></li>
+  
+  </ul>
+</div>
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 xiongbo
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'xiongbo';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

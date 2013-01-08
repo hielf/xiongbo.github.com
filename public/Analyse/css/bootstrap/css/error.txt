@@ -1,0 +1,4 @@
+A less error occured trying to build your bundle. Please paste the error below in an issue for us at http://github.com/twitter/bootsrap! thanks!
+
+
+{"type":"Parse","message":"Syntax Error on line 1324","index":34739,"filename":"bootstrap.css","line":1324,"column":0,"extract":["}undefinedundefined//","// Tables.less","// Tables for, you guessed it, tabular data"]}

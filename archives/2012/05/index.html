@@ -1,0 +1,320 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Archives: 2012/05 | xiongbo.ME</title>
+  <meta name="author" content="xiongbo">
+  
+  
+  <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="xiongbo.ME"/>
+
+  <link rel="alternate" href="/atom.xml" title="xiongbo.ME" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">xiongbo.ME</a></h1>
+  <h2><a href="/">project code and simple life</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+
+<h2 class="archive-title">2012/05</h2>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2012-05-17T00:00:00.000Z"><a href="/2012/05/17/2012-05-17-env-create/">May 17, 2012</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2012/05/17/2012-05-17-env-create/">linux虚拟机上的rails环境配置</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>下载LMDE xcfe版的linux，并通过vmware创建虚拟机。
+
+</p>
+<p>在终端下执行以下命令安装rvm：
+
+</p>
+<pre><code><div class="line">bash &lt; <span class="xml"><span class="tag">&lt;<span class="title">(curl</span> <span class="attribute">-s</span> <span class="attribute">https:</span>//<span class="attribute">raw.github.com</span>/<span class="attribute">wayneeseguin</span>/<span class="attribute">rvm</span>/<span class="attribute">master</span>/<span class="attribute">binscripts</span>/<span class="attribute">rvm-installer</span> )</span></div></code></pre>
+<p>将以下脚本追加到当前用户主目录下的.bashrc文件:
+
+</p>
+<pre><code><div class="line"><span class="string">[[ -s "$HOME/.rvm/scripts/rvrm" ]]</span> &amp;&amp; . <span class="string">"$HOME/.rvm/scripts/rvm"</span></div></code></pre>
+<p>通过<code>rvm 1.9.3</code>安装ruby
+
+</p>
+<p>安装过程中遇到无法读取zlib和openssl的问题，可以通过以下方式解决：
+
+</p>
+<pre><code><div class="line"><span class="comment">rvm</span> <span class="comment">pkg</span> <span class="comment">install</span> <span class="comment">zlib</span></div><div class="line"><span class="comment">rvm</span> <span class="comment">pkg</span> <span class="comment">install</span> <span class="comment">openssl</span></div><div class="line"><span class="comment">rvm</span> <span class="comment">remove</span> <span class="comment">1</span>.<span class="comment">9</span>.<span class="comment">3</span></div><div class="line"><span class="comment">rvm</span> <span class="comment">install</span> <span class="comment">1</span>.<span class="comment">9</span>.<span class="comment">3</span> <span class="literal">-</span><span class="comment">C</span> <span class="literal">-</span><span class="literal">-</span><span class="comment">with</span>-<span class="comment">openssl</span>-<span class="comment">dir=$HOME/</span>.<span class="comment">rvm/usr</span>,<span class="literal">-</span><span class="literal">-</span><span class="comment">with</span>-<span class="comment">iconv</span>-<span class="comment">dir=$HOME/</span>.<span class="comment">rvm/usr</div></code></pre>
+<p>通过<code>gem install rails -v 3.2.3</code>安装rails
+
+</p>
+<p>接着又遇到了无法安装sqlite3的问题，可以通过如下的方式解决<code>apt-get install libsqlite3-dev</code>
+
+</p>
+<p>通过以下页面安装node.js<a href="https://gist.github.com/579814">https://gist.github.com/579814</a>
+
+</p>
+<p>期间遇到了<code>Checking for library dl  : not found</code>的问题，可以通过 <code>sudo apt-get install libcurl4-openssl-dev</code>进行解决
+
+</p>
+<p>通过<code>node -v</code>和<code>npm -v</code>检查是否安装正确
+
+</p>
+<p>通过<code>npm install coffee-script</code>安装coffeescript</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2012-05-13T00:00:00.000Z"><a href="/2012/05/13/2011-05-13-google-app-engine-1/">May 13, 2012</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2012/05/13/2011-05-13-google-app-engine-1/">Google App Engine系列：准备</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>（本文译自：<a href="http://tutorialzine.com/2011/01/getting-started-with-google-app-engine/">http://tutorialzine.com/2011/01/getting-started-with-google-app-engine/</a>） 
+
+</p>
+<p>在第一节中，你将了解这个平台以及如何在平台上开发应用。通过这个系列，我们将通过Python和Jquery创建一个功能齐全的web应用，该应用能够监控你网站的性能，并且记录停机时间（downtime). 什么是Google App Engine App Engine是一个用来提供开发和运行环境的平台。这意味着快速、高可靠性、以及可扩展性。你只需要关心你的代码，并且确信google能够搞定其他的一切：） 并且这项服务还有一点好处，他提供了500万的pv，不过如果超出，你需要为此付一定的费用。 你可以采用java或者python来创建web应用。
+
+</p>
+<p>在本系列中，我们将采用python2.5。App Engine提供了一些基于数据存储、缓存、进程等的api，你可以在你的项目中使用它们。App Engine 为这些服务提供的每日配额足够我们这个系列应用的使用。 以下的这些资源将帮助你更好的了解这个平台。在开发仪表板的时候，我始终开着它们： App Engine getting started guide App Engine documentation for Python Python tutorial for beginners Python 2.5.2 documentation 准备开始 
+
+</p>
+<p>第一步：在Google App Engine上注册。如果你已经有帐号了，请登录。 
+<img src="http://cdn.tutorialzine.com/wp-content/uploads/2011/01/getting-started-google-appengine.jpg" alt="p1">
+
+</p>
+<p>第二步，请安装python2.5，并下载App Engine SDK。SDK包括一个和App Engine类似的开发环境，以及一个用于发布应用的程序（App Launcher）。这意味着你可以在你的本地环境中发布web应用，并在适合的时候部署到App Engine。 
+
+</p>
+<p><img src="http://cdn.tutorialzine.com/wp-content/uploads/2011/01/app-engine-launcher.jpg" alt="p2">
+
+</p>
+<p>使用App Launcher你可以随时启动/停止，以及发布你的应用程序。并通过localhost进行访问。 
+
+</p>
+<p>点击“Run”将启动web服务器，它提供了和App Engine相同的运行环境。
+
+</p>
+<p>点击“Browse“将在你的默认浏览器中打开你的项目。
+
+</p>
+<p>“SDK Console”提供数据库的综合管理（即我们的“仪表板”将要存储数据的位置）。
+
+</p>
+<p>“Deploy”将在Appspot.com上发布并建立你的web应用。 
+
+</p>
+<p>建立你自己的仪表版 我当然不想直到系列结束你们都一直这样干看着，所以你现在应该马上建立你自己的版本，并且亲身感受一下。以下是你需要做的： 
+
+</p>
+<p>打开appengine.google.com，创建新的应用。第一次创建的时候，你需要短信确认。然后，你可以为你的应用命名。 下载“仪表版”的源码，并进行解压。 打开“App Launcher，通过“File&gt;Add Existing Application“导入这个应用。 
+
+</p>
+<p>完成以上的步骤，请用编辑器打开“app.yaml&quot;文件，修改应用标识符（your-application-identifier） application: your-application-identifier version: 1 runtime: python api_version: 接下来，打开&quot;config/config.py&quot;，修改你的应用名称，域名和搜索字符。 scriptTitle = &quot;Your Application Title&quot; fetchURL = &quot;<a href="http://domain-to-be-checked.com/">http://domain-to-be-checked.com/</a>&quot; searchString = &quot;WordInThePageText&quot; 搜索字符串必须是你的主页中存在的。比如在“仪表版”的例子中，我使用了“Tutorialzine“，这串字符的存在将告知你的 脚本：页面已经成功获取。（这段话有点不太懂是什么意思） 最后，你点击“Deploy”，就可以将你的应用部署到你的appspot.com的域名下。你可以对你的应用绑定其他的域名。
+
+</p>
+<p>现在你已经拥有了一个正常运行的“仪表版”，接下来我们将开始实战了！</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2012-05-02T00:00:00.000Z"><a href="/2012/05/02/2012-05-02-Make-Dumb-Data-Smart-with-composed-of/">May 2, 2012</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2012/05/02/2012-05-02-Make-Dumb-Data-Smart-with-composed-of/">Rails Recipes --通过composed_of构建结构化数据</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3>问题</h3>
+<p>如何对数据进行结构化封装，从而可以使用面向对象的方式进行访问呢？采用compose_of()方法可以解决这个问题！
+
+</p>
+<h3>解决方法</h3>
+<p>假设现在有一个课程分数模型CourseRecord，其中有一个表示该课程分数的字段：letter_grade，该模型的表示如下：
+
+</p>
+<pre><code><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CourseRecord</span> &lt; <span class="title">ActiveRecord</span>::<span class="title">Base</span></div><div class="line">    <span class="title">composed_of</span> :<span class="title">grade</span>,</div><div class="line">            <span class="title">class_name</span>: '<span class="title">Grade</span>', </div><div class="line">            <span class="title">mapping</span>: %<span class="title">w</span>(<span class="title">letter_grade</span> <span class="title">letter_grade</span>)</div><div class="line"><span class="title">end</span></div></code></pre>
+<p>这里的grade表示封装的属性名称，并通过mapping属性将letter_grade字段与稍后提到的Grade模型中的letter_grade字段进行映射。这里的class_name属性是可选的，它表示对应的封装模型名称，如果不指定，则默认为属性封装名称，即grade。下面是Grade的模型表示：
+
+</p>
+<pre><code><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Grade</span></span></div><div class="line">    <span class="keyword">include</span> <span class="constant">Comparable</span></div><div class="line">    attr_accessor <span class="symbol">:letter_grade</span></div><div class="line">    <span class="constant">SORT_ORDER</span> = [<span class="string">"f"</span> , <span class="string">"d"</span> , <span class="string">"c"</span> , <span class="string">"b"</span> , <span class="string">"a"</span> ].inject({}) {|h, letter| </div><div class="line">    h.update <span class="string">"<span class="subst">#{letter}</span>-"</span> =&gt; h.size</div><div class="line">    h.update letter =&gt; h.size</div><div class="line">    h.update <span class="string">"<span class="subst">#{letter}</span>+"</span> =&gt; h.size</div><div class="line">    }</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(letter_grade)</span></span></div><div class="line">        <span class="variable">@letter_grade</span> = letter_grade</div><div class="line">    <span class="keyword">end</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">&lt;=&gt;</span><span class="params">(other)</span></span></div><div class="line">        <span class="constant">SORT_ORDER</span>[letter_grade.downcase] &lt;=&gt;</div><div class="line">        <span class="constant">SORT_ORDER</span>[other.letter_grade.downcase]</div><div class="line">    <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></code></pre>
+<p>通过这种方式，我们就可以对属性进行个性化的封装。然后我们就能采用如下的方式进行比较：
+
+</p>
+<pre><code><div class="line">&gt;&gt; Grade.<span class="keyword">new</span>(<span class="string">"a-"</span>) &lt; Grade.<span class="keyword">new</span>(<span class="string">"a+"</span>) <span class="preprocessor"># =&gt; true</span></div></code></pre>
+<p>其中Comparable mixin用于类中的对象间的排序。并且，这个类必须定义&lt;=&gt;操作符，用于确定对象间如何进行比较，根据是否小于，等于 或大于这个其它对象来决定返回值-1、0、1。
+
+</p>
+<p>值得一提的是想要通过<code>course.grade.letter_grade = &quot;f&quot;; course.save</code>的方式对对象的值进行修改的话，是行不通的。而必须采用<code>course.grade = Grade.new(&quot;f&quot;); course.save</code>的方式才行。
+
+</p>
+<p>特别有用的是，不仅仅是单一的字段，还可以对多个字段进行封装，比如在逻辑上应该属于一类的字段<em>street, city, state, country</em>，可以通过如下的方式封装到address对象中。
+
+</p>
+<pre><code><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> &lt; <span class="title">ActiveRecord</span>::<span class="title">Base</span></div><div class="line">    <span class="title">composed_of</span> :<span class="title">address</span>, :<span class="title">mapping</span> =&gt; [ %<span class="title">w</span>(<span class="title">address_street</span> <span class="title">street</span>),</div><div class="line">        %<span class="title">w</span>(<span class="title">address_city</span> <span class="title">city</span>),</div><div class="line">        %<span class="title">w</span>(<span class="title">address_state</span> <span class="title">state</span>) ,</div><div class="line">        %<span class="title">w</span>(<span class="title">address_country</span> <span class="title">country</span>) ]</div><div class="line"><span class="title">end</span></div></code></pre>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+
+  <nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+<div class="search">
+  <form action="http://google.com/search" method="get" accept-charset="utf-8">
+    <input type="text" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:xiongbo.me">
+  </form>
+</div>
+
+
+
+
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Project/">Project</a><small>1</small></li>
+  
+    <li><a href="/tags/Rails-Recipes/">Rails-Recipes</a><small>3</small></li>
+  
+    <li><a href="/tags/design/">design</a><small>1</small></li>
+  
+    <li><a href="/tags/project/">project</a><small>1</small></li>
+  
+    <li><a href="/tags/reading-notes/">reading-notes</a><small>3</small></li>
+  
+    <li><a href="/tags/summary/">summary</a><small>3</small></li>
+  
+    <li><a href="/tags/translate/">translate</a><small>3</small></li>
+  
+  </ul>
+</div>
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 xiongbo
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'xiongbo';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

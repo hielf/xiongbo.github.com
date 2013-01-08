@@ -1,0 +1,289 @@
+﻿<!DOCTYPE HTML>
+<html>
+  <head>
+		<title>公共资源交易综合汇总统计</title>
+		<link rel="stylesheet" href="../css/bootstrap/css/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
+		<link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" charset="utf-8"></script> 
+    <style type="text/css">
+      #accomplishment, #accomplishment_month_sum {
+        width : 450px;
+        height: 400px;
+			}
+			#accomplishment_efficiency_rate, #accomplishment_efficiency_detail {
+				width : 450px;
+				height: 300px;
+			}
+      #transaction_ratio, #transaction_ratio_sum {
+        width : 450px;
+        height: 400px;
+				opacity: 0;
+      }
+      #accomplishment_sum {
+        width : 450px;
+        height: 400px;
+      }
+      #accomplishment_num {
+        width : 450px;
+        height: 400px;
+      }
+    </style>
+  </head>
+  <body>
+		<div class="container">
+			<h1 class="center pdv20">公共资源交易项目<strong class='lightblue'>综合汇总</strong>统计</h1>
+			<div class="row">
+				<p class="bg-lightgreen fnormal">2011年，全市六大交易中心共申请交易<em class="red fbig">3307</em>宗,成交金额<em class="red fbigger">1497.43亿元</em></p>
+			</div>
+			<div class="row top-line pdv20">
+				<div id="accomplishment_sum" class="span6 fnormal"></div>
+				<div id="accomplishment_num" class="span6 fnormal"></div>
+			</div>
+			<div class="row">
+				<h4 class="right lh30 pdv20"><span class="label label-info" id="check_accomplishment_detail"><i class="icon-list-alt"></i>查看交易详细数据</span></h4>
+			</div>
+			<div class="row" id="accomplishment_detail" style="display:none" >
+				<table class="table table-striped" >
+					<thead>
+						<tr><th>交易额排名</th><th>交易中心</th><th>交易额汇总</th><th>交易数汇总</th><th>交易数排名</th></tr>
+					</thead>
+					<tbody>
+						<tr><td><span class="badge badge-success">第一名</span></td><td>建设工程交易中心</td><td>925.32亿元</td><td>1623宗</td><td><span class="badge badge-info">第一名</span></td></tr>
+						<tr><td><span class="badge badge-success">第二名</span></td><td>土地交易中心</td><td>534.89亿元</td><td>206宗</td><td><span class="badge badge-info">第六名</span></td></tr>
+						<tr><td><span class="badge badge-success">第三名</span></td><td>政府采购</td><td>25.76亿元</td><td>315宗</td><td><span class="badge badge-info">第四名</span></td></tr>
+						<tr><td><span class="badge badge-success">第四名</span></td><td>农村综合产权交易所</td><td>8.21亿元</td><td>420宗</td><td><span class="badge badge-info">第三名</span></td></tr>
+						<tr><td><span class="badge badge-success">第五名</span></td><td>卫生局医用物资采购管理办公室</td><td>2.81亿元</td><td>431宗</td><td><span class="badge badge-info">第二名</span></td></tr>
+						<tr><td><span class="badge badge-success">第六名</span></td><td>知识产权交易中心</td><td>0.44亿元</td><td>312宗</td><td><span class="badge badge-info">第五名</span></td></tr>
+					</tbody>
+				</table>
+			</div>
+			<p class="bg-lightblue fnormal">2011年，建设工程、政府采购、医用物资三大中心招投标预算共计<em class="red fbig">1172.6亿元</em>，实际交易额共计<em class="red fbig">953.89亿元</em>，节约率达<em class="red fbigger">18.7%</em></p>
+			<div class="row top-line pdv50">
+				<div id="accomplishment_efficiency_rate" class="span6">
+				</div> 
+				<div id="accomplishment_efficiency_detail" class="span6">
+					<p class="down-line "><span class="label">节约率详细数据：</span></p> 
+					<table class="table table-striped" >
+						<thead>
+							<tr><th>交易中心</th><th>预算金额</th><th>实际交易额</th><th>节约率</th></tr>
+						</thead>
+						<tbody>
+							<tr><td>建设工程交易中心</td><td>1132.58亿元</td><td>925.32亿元</td><td><span class="badge badge-success">18.30%</span></td></tr>
+							<tr><td>政府采购</td><td>36.81亿元</td><td>25.76亿元</td><td><span class="badge badge-success">30.02%</span></td></tr>
+							<tr><td>医用物资采购管理办公室</td><td>3.21亿元</td><td>2.81亿元</td><td><span class="badge badge-success">12.46%</span></td></tr>
+						</tbody>
+						<tfoot>
+							<tr><th>合计</th><th>1172.6亿元</th><th>953.89亿元</th><th>20.26%</th></tr>
+						</tfoot> 
+					</table> 
+				</div> 
+			</div>
+			
+			<h4 class="right under-line lightblue top-line pdv20">数据来源：六大交易中心2011年汇总数据</h4> 
+		</div>
+    <!--[if IE]>
+		<script type="text/javascript" src="../FlashCanvasPro/bin/flashcanvas.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="../flotr2/flotr2.min.js"></script>
+    <script type="text/javascript">
+      (function () {
+
+        var
+					accomplishment_efficiency_rate = document.getElementById('accomplishment_efficiency_rate'),
+					accomplishment_month_sum = document.getElementById('accomplishment_month_sum'),
+					accomplishment_sum = document.getElementById('accomplishment_sum'),
+					accomplishment_num = document.getElementById('accomplishment_num'),
+				  accomplishment_data, accomplishment_sum_data, graph, graph_pie, offset, i;
+
+					accomplishment_data = [[1,20],[2,38],[3,15],[4,78],[5,67],[6,49],[7,99]]
+					accomplishment_sum_data = [[1,20],[2,38],[3,15],[4,78],[5,67],[6,49],[7,99]]
+
+				
+				//accomplishment_sum
+				var
+					d1 = [['卫生局', 2.81]],
+					d2 = [['市财政', 25.76]],
+					d3 = [['建设工程', 925.32]],
+					d4 = [['专利交易', 0.44]],
+					d5 = [['土地交易', 534.89]],
+					d6 = [['农村产权', 8.21]]
+					
+				g_accomplishment_sum = Flotr.draw(
+					accomplishment_sum,
+					[
+						{ data : d1, label : '卫生局',
+							pie : {
+								explode : 50
+							}
+						},
+						{ data : d3, label : '建设工程' },
+						{ data : d2, label : '市财政' },
+						{ data : d4, label : '专利交易',
+							pie : {
+								explode : 50
+							}
+						},
+						{ data : d5, label : '土地交易' },
+						{ data : d6, label : '农村产权' }
+					], 
+					{
+						defaultType: 'pie',
+						shadowSize: 2,
+						title: '2011全市六大公共资源交易中心交易额(亿元)占比统计',
+						subtitle: '截止至2011年12月',
+						pie: {
+							show: true,
+							fill: true,
+							fillColor: null,
+							fillOpacity: 0.6,
+							explode: 6,
+							sizeRatio: 0.6,
+							startAngle: Math.PI/4,
+							labelFormatter: Flotr.defaultPieLabelFormatter,
+							pie3D: true,
+							pie3DviewAngle: (Math.PI/2 * 0.8),
+							pie3DspliceThickness: 20,
+							epsilon: 0.1
+						}, 
+						grid: {
+							outlineWidth: 1,
+							outline: 'sw',
+							color: '#BD7803'
+						},
+						mouse : {
+							track : true,
+							lineColor : 'purple',
+							relative : true,
+							position : 'ne',
+							sensibility : 1,
+							trackDecimals : 2,
+							trackFormatter : function (o) { return o.x + ':' + o.y + '亿元';}
+						},
+						yaxis : {
+							showLabels : false
+						}, 
+						xaxis : {
+							showLabels : false
+						},
+						legend : {
+							position : 'se',
+							backgroundColor : '#FDD283'
+						}
+					}
+				);
+				
+				//accomplishment_num
+				var
+					bars = {
+						data: [[315,6],[312,5],[420,4],[1623,3],[206,2],[431,1]],
+						bars: {
+							show: true,
+							barWidth: 0.7,
+							lineWidth: 1,
+							fillOpacity: 0.3,
+							horizontal: true
+						} 
+					}
+				g_accomplishment_num = Flotr.draw(
+					accomplishment_num,
+					[bars],
+					{
+						defaultType: 'bars',
+						shadowSize: 0,
+						colors : ['#55A255'],
+						grid: {
+							outlineWidth: 1,
+							outline: 'w',
+							color: '#BD7803'
+						}, 
+						selection : {
+							mode : 'x'
+						},
+						mouse : {
+							track : true,
+							lineColor : 'purple',
+							relative : true,
+							position : 'ne',
+							sensibility : 1,
+							trackDecimals : 0,
+							trackFormatter : function (o) { return o.x + '宗'}
+						},
+						xaxis : {
+							min : 0,
+							autoscalemarin : 10,
+							margin : true,
+							titleAligh : 'left'
+						}, 
+						yaxis : {
+							ticks : [[6,'市财政采管办'],[5,'专利展示交易中心'],[4,'市卫生局采管办'],[3,'建设工程交易中心'],[2,'土地交易中心'],[1,'农村产权交易所']],
+							showLabels : true,
+							},
+							title : '2011年全市公共资源交易项目交易量统计',
+							subtitle : '(截止至2011年12月)'
+						}
+					); 
+
+				
+				
+				
+				//accomplishment_efficiency_rate
+				var
+					efficiency_rate_bars = {
+						data: [[25.3,3],[18.5,2],[12.46,1]],
+						bars: {
+							show: true,
+							barWidth: 0.7,
+							lineWidth: 1,
+							fillOpacity: 0.3,
+							horizontal: true
+					}
+				}
+				g_accomplishment_efficiency_rate = Flotr.draw(
+					accomplishment_efficiency_rate,
+					[efficiency_rate_bars],
+					{
+						shadowSize: 1,
+						grid: {
+							outlineWidth: 1,
+							outline: 'sw',
+							color: '#036803'
+						},
+						mouse : {
+							track : true,
+							lineColor : 'purple',
+							relative : true,
+							position : 'ne',
+							sensibility : 1,
+							trackDecimals : 2,
+							trackFormatter : function (o) { return '节约率:' + o.x + '%';}
+						},
+						xaxis : {
+							min : 0,
+							autoscalemarin : 10,
+							margin : true,
+							titleAligh : 'left'
+						}, 
+						yaxis : {
+							ticks : [[3,'市财政采管办'],[2,'市卫生局采管办'],[1,'建设工程交易中心']],
+							showLabels : true,
+							},
+							title : '2012年全市交易额节约率分类统计',
+							subtitle : '(截止至2012年6月)'
+						} 
+				);
+
+
+				//event reg
+				$("#check_accomplishment_detail").toggle(
+						function(){
+							$("#accomplishment_detail").slideDown('slow');
+						},
+						function(){
+							$("#accomplishment_detail").slideUp("slow"); 
+						}
+				)
+	})();
+</script>
+  </body>
+</html>
+

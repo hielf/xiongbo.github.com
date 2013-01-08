@@ -1,0 +1,322 @@
+﻿<!DOCTYPE HTML>
+<html>
+  <head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>公共资源交易月度汇总统计</title>
+		<link rel="stylesheet" href="../css/bootstrap/css/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
+		<link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" charset="utf-8"></script> 
+    <style type="text/css">
+      #accomplishment, #accomplishment_month_sum, #accomplishment_efficiency_rate {
+        width : 450px;
+        height: 400px;
+      }
+      #transaction_ratio, #transaction_ratio_sum {
+        width : 450px;
+        height: 400px;
+				opacity: 0;
+      }
+      #accomplishment_sum {
+        width : 450px;
+        height: 400px;
+      }
+      #accomplishment_num {
+        width : 450px;
+        height: 400px;
+      }
+    </style>
+  </head>
+  <body>
+		<div class="container">
+			<h1 class="center pdv20">公共资源交易项目<strong class="lightblue">月度汇总</strong>统计</h1>
+			<div class="row">
+				<p class="bg-lightyellow fnormal">截至到2012年6月，全市六大交易中心共交易成功<em class="lightblue fbig">1856</em>次，交易额共计<em class="lightblue fbig">700.19亿元</em></p>
+				<div class="row top-line pdv50">
+					<div id="accomplishment" class="span6"></div>
+					<div id="transaction_ratio" class="span6"></div>
+				</div>
+				<div class="row top-line pdv50">
+					<div id="accomplishment_month_sum" class="span6"></div>
+					<div id="transaction_ratio_sum" class="span6"></div>
+				</div>
+				<h4 class="right under-line lightblue top-line pdv20">数据来源：六大交易中心 截至至2012年6月30日</h4> 
+			</div>
+    <!--[if IE]>
+		<script type="text/javascript" src="../FlashCanvasPro/bin/flashcanvas.js"></script> 
+    <![endif]-->
+    <script type="text/javascript" src="../flotr2/flotr2.min.js"></script>
+    <script type="text/javascript">
+      (function () {
+
+        var
+					accomplishment_month = document.getElementById('accomplishment'),
+					accomplishment_month_sum = document.getElementById('accomplishment_month_sum'),
+				  accomplishment_data, accomplishment_sum_data, graph, graph_pie, offset, i;
+
+				
+				//accomplishment_month_num
+				var accomplishment_month_num_data = [[1,252],[2,89],[3,240],[4,241],[5,380],[6,329]];
+				g_accomplishment = Flotr.draw(
+					accomplishment_month,
+					[accomplishment_month_num_data],
+					{
+						defaultType: 'bars',
+						shadowSize: 1,
+						grid: {
+							outlineWidth: 1,
+							outline: 'sw',
+							color: '#036803'
+						},
+						bars : {
+							show : true,
+							horizontal : false,
+							shadowSize : 1,
+							barWidth : 0.7
+							}, 
+						mouse : {
+							track : true,
+							lineColor : 'purple',
+							relative : true,
+							position : 'ne',
+							sensibility : 1,
+							trackDecimals : 0,
+							trackFormatter : function (o) { return '交易量：' + o.y + '宗';}
+						},
+						yaxis : {
+							min : 0,
+							autoscalemarin : 10
+						}, 
+						xaxis : {
+							ticks : [[1,'一月'],[2,'二月'],[3,'三月'],[4,'四月'],[5,'五月'],[6,'六月']],
+							showLabels : true,
+							margin : true,
+							titleAligh : 'left',
+							title : '合计：1531宗'
+							},
+							title : '2012年全市公共资源交易项目完成量分布',
+							subtitle : '(截止至2012年6月)'
+						}
+				);
+
+				Flotr.EventAdapter.observe(accomplishment_month, 'flotr:click', function(position){
+						var s = g_accomplishment.series[0];
+						var y = g_accomplishment.axes.x;
+						var closest = g_accomplishment.hit.closest(position);
+						var transaction_ratio_data, subtitle;
+	
+						switch(closest.x.dataIndex)
+						{
+							case 0:
+								transaction_ratio_data = [[26,6],[18,5],[65,4],[97,3],[14,2],[32,1]]
+								subtitle = '月度统计(2012年1月)';
+								break
+							case 1:
+								transaction_ratio_data = [[16,6],[5,5],[11,4],[50,3],[3,2],[4,1]]
+								subtitle = '月度统计(2012年2月)';
+								break
+							case 2:
+								transaction_ratio_data = [[32,6],[12,5],[43,4],[87,3],[23,2],[43,1]]
+								subtitle = '月度统计(2012年3月)';
+								break
+							case 3:
+								transaction_ratio_data = [[41,6],[23,5],[23,4],[112,3],[25,2],[17,1]]
+								subtitle = '月度统计(2012年4月)';
+								break
+							case 4:
+								transaction_ratio_data = [[51,6],[27,5],[53,4],[209,3],[19,2],[21,1]]
+								subtitle = '月度统计(2012年5月)';
+								break
+							case 5:
+								transaction_ratio_data = [[84,6],[31,5],[15,4],[150,3],[11,2],[38,1]]
+								subtitle = '月度统计(2012年6月)';
+								break
+							default:
+						}
+						$('#transaction_ratio').css('opacity', 0);
+						draw_month_accomplishment(transaction_ratio_data, subtitle);
+						$('#transaction_ratio').fadeTo('slow',0.9);
+				});
+
+				//accomplishment_month_sum
+				var accomplishment_month_sum_data = [[1,67.59],[2,34.39],[3,94.29],[4,133.26],[5,168.42],[6,129.26]];
+				g_accomplishment_month_sum = Flotr.draw(
+					accomplishment_month_sum,
+					[accomplishment_month_sum_data],
+					{
+						defaultType: 'bars',
+						shadowSize: 1,
+						colors: ['#55A255'],
+						grid: {
+							outlineWidth: 1,
+							outline: 'sw',
+							color: '#049FF1'
+						},
+						bars : {
+							show : true,
+							horizontal : false,
+							shadowSize : 1,
+							barWidth : 0.7
+							},
+						mouse : {
+							track : true,
+							lineColor : 'purple',
+							relative : true,
+							position : 'ne',
+							sensibility : 1,
+							trackDecimals : 2,
+							trackFormatter : function (o) { return '交易额：' + o.y + '亿元';}
+						},
+						yaxis : {
+							min : 0,
+							autoscalemarin : 10
+						}, 
+						xaxis : {
+							ticks : [[1,'一月'],[2,'二月'],[3,'三月'],[4,'四月'],[5,'五月'],[6,'六月']],
+							showLabels : true,
+							margin : true,
+							titleAligh : 'left',
+							title : '合计：627.22亿元'
+							},
+							title : '2012年全市公共资源交易项目交易额分布',
+							subtitle : '(截止至2012年6月)'
+						}
+				);
+
+				Flotr.EventAdapter.observe(accomplishment_month_sum, 'flotr:click', function(position){
+						var s = g_accomplishment_month_sum.series[0];
+						var y = g_accomplishment_month_sum.axes.x;
+						var closest = g_accomplishment_month_sum.hit.closest(position);
+						var transaction_ratio_sum_data, subtitle;
+	
+						switch(closest.x.dataIndex)
+						{
+							case 0:
+								transaction_ratio_sum_data = [[2.70,6],[0.06,5],[0.22,4],[34.00,3],[28.31,2],[1.3,1]]
+								subtitle = '月度统计(2012年1月)';
+								break
+							case 1:
+								transaction_ratio_sum_data = [[1.62,5],[0.01,6],[0.04,4],[24.00,3],[6.71,2],[0.02,1]]
+								subtitle = '月度统计(2012年2月)';
+								break
+							case 2:
+								transaction_ratio_sum_data = [[3.22,6],[0.02,5],[0.29,4],[41.00,3],[46.31,2],[0.45,1]]
+								subtitle = '月度统计(2012年3月)';
+								break
+							case 3:
+								transaction_ratio_sum_data = [[2.61,6],[0.04,5],[0.47,4],[72.50,3],[53.13,2],[0.51,1]]
+								subtitle = '月度统计(2012年4月)';
+								break
+							case 4:
+								transaction_ratio_sum_data = [[4.45,6],[0.11,5],[1.11,4],[124.12,3],[32.54,2],[1.09,1]]
+								subtitle = '月度统计(2012年5月)';
+								break
+							case 5:
+								transaction_ratio_sum_data = [[6.21,6],[0.03,5],[0.91,4],[81.06,3],[34.22,2],[0.83,1]]
+								subtitle = '月度统计(2012年6月)';
+								break
+							default:
+						}
+						$('#transaction_ratio_sum').css('opacity', 0);
+						draw_month_accomplishment_sum(transaction_ratio_sum_data, subtitle);
+						$('#transaction_ratio_sum').fadeTo('slow',0.9);
+				});
+
+				draw_month_accomplishment([[84,6],[31,5],[15,4],[150,3],[11,2],[38,1]],'月度统计(2012年6月)');
+				draw_month_accomplishment_sum([[6.21,6],[0.03,5],[0.91,4],[81.06,3],[34.22,2],[0.83,1]],'月度统计(2012年6月)');
+				$('#transaction_ratio').css('opacity',1);
+				$('#transaction_ratio_sum').css('opacity',1);
+		})();
+
+function draw_month_accomplishment(transaction_ratio_data,subtitle){
+	var transaction_ratio = document.getElementById('transaction_ratio');
+	Flotr.draw(
+		transaction_ratio,
+		[transaction_ratio_data],
+		{
+			defaultType: 'bars',
+			colors : ['#FFBB1C'],
+			grid: {
+							outlineWidth: 1,
+							outline: 'w',
+							color: '#036803'
+			},
+			bars : {
+				show : true,
+				horizontal : true,
+				shadowSize : 1,
+				barWidth : 0.7
+				},
+			mouse : {
+				track : true,
+				lineColor : 'purple',
+				relative : true,
+				position : 'ne',
+				sensibility : 1,
+				trackDecimals : 0,
+				trackFormatter : function (o) { return '交易量：' + o.x + '宗';}
+			},
+			xaxis : {
+				min : 0,
+				autoscalemarin : 10,
+				margin : true,
+				titleAligh : 'left'
+			}, 
+			yaxis : {
+				ticks : [[6,'市财政采管办'],[5,'专利展示交易中心'],[4,'市卫生局采管办'],[3,'建设工程交易中心'],[2,'土地交易中心'],[1,'农村产权交易所']],
+				showLabels : true,
+				},
+				title : '2012年全市公共资源交易项目完成量分布',
+				subtitle : subtitle
+			} 
+	);
+}
+
+function draw_month_accomplishment_sum(transaction_ratio_sum_data,subtitle){
+	var transaction_ratio_sum = document.getElementById('transaction_ratio_sum');
+	Flotr.draw(
+		transaction_ratio_sum,
+		[transaction_ratio_sum_data],
+		{
+			defaultType: 'bars',
+			colors : ['#BEC0C2'],
+			grid: {
+							outlineWidth: 1,
+							outline: 'w',
+							color: '#049FF1'
+			},
+			bars : {
+				show : true,
+				horizontal : true,
+				shadowSize : 1,
+				barWidth : 0.7
+				},
+			mouse : {
+				track : true,
+				lineColor : 'purple',
+				relative : true,
+				position : 'ne',
+				sensibility : 1,
+				trackDecimals : 2,
+				trackFormatter : function (o) { return '交易额：' + o.x + '亿元';}
+			},
+			xaxis : {
+				min : 0,
+				autoscalemarin : 10,
+				margin : true,
+				titleAligh : 'left'
+			}, 
+			yaxis : {
+				ticks : [[6,'市财政采管办'],[5,'专利展示交易中心'],[4,'市卫生局采管办'],[3,'建设工程交易中心'],[2,'土地交易中心'],[1,'农村产权交易所']],
+				showLabels : true,
+				},
+				title : '2012年全市公共资源交易项目交易额分布',
+				subtitle : subtitle
+			} 
+	);
+}
+
+
+    </script>
+  </body>
+</html>
+

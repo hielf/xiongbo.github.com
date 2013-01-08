@@ -1,0 +1,256 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Archives: 2011 | xiongbo.ME</title>
+  <meta name="author" content="xiongbo">
+  
+  
+  <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="xiongbo.ME"/>
+
+  <link rel="alternate" href="/atom.xml" title="xiongbo.ME" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">xiongbo.ME</a></h1>
+  <h2><a href="/">project code and simple life</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+
+<h2 class="archive-title">2011</h2>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2011-06-12T00:00:00.000Z"><a href="/2011/06/12/2011-6-12-jquery-plugin/">Jun 12, 2011</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2011/06/12/2011-6-12-jquery-plugin/">如何编写jquery插件</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>译自（<a href="http://tutorialzine.com/2011/02/converting-jquery-code-plugin/">http://tutorialzine.com/2011/02/converting-jquery-code-plugin/</a>） 
+
+</p>
+<p>demo见这里（<a href="http://demo.tutorialzine.com/2011/02/converting-jquery-code-plugin/">http://demo.tutorialzine.com/2011/02/converting-jquery-code-plugin/</a>） 
+
+</p>
+<p>下载见这里（<a href="http://demo.tutorialzine.com/2011/02/converting-jquery-code-plugin/jquery.tzSelect.zip">http://demo.tutorialzine.com/2011/02/converting-jquery-code-plugin/jquery.tzSelect.zip</a>） 
+
+</p>
+<p>当谈到有效的组织jquery代码，最好的选择是将其中的核心部分转换成插件。这样做有很多的益处：你的代码变得更容易修改和跟踪，重复性的任务也更容易处理。通过插件的形式组织代码重用能提高你的开发速度。 这就是为什么我们今天要来展示如何包装一个jQuery插件的原因。我们将使用使用jquery和css3美化的你的下拉菜单中的代码，并将它包装成一个随时可用的jQuery插件。 
+
+</p>
+<h3>想法</h3>
+<p>写一个jquery一点也不难。你需要通过自己的函数扩展$.fn对象。不管如何，难点是采用正确的方法去组织你的代码，以便你的插件能够容易的嵌入和使用。 
+
+</p>
+<p>下面就是我们在转换代码为插件的过程中需要解决的问题： 
+<em> 1.我们需要让用户能够控制下拉菜单中生成什么样的标记。比如例子中的代码就很大程度上依赖数据属性（包含html标记）的存在。这对于插件而言太具体，所以在实施的过程中，我们要将其排除。 
+</em> 2.因为插件被调用的方式，我们需要重写代码，通过使用“this”对象替换选择器硬编码方式。这也能够使它一次转换多个select元素。 
+* 3.我们需要将从插件中提取出javascript和css代码分解成文件，以便容易的嵌入和发布。 代码 不知你还记不记得，在上一篇课程中，jQuery代码遍历了下拉菜单的所有选项，并创建了一个无序列表。同时，也通过option的data属性，得到图片的url和描述，并插入到列表中。 
+
+</p>
+<p>不过这些对于插件来说还是太具体了。我们需要给用户提供重写这个功能的能力。为了解决这个问题，我们可以允许用户通过传参数的方式将方法传递给插件，用来替代生成的标记。如果这个“方法参数”无法使用，我们将采取默认的方法——只是将option的文字提取出来，插入到列表中。 让我们看看代码如何实现：
+
+</p>
+<pre><code><div class="line"><span class="list">(<span class="title">function</span><span class="body"><span class="list">(<span class="body">$)</span></span>{</div><br><div class="line">$.fn.tzSelect = function<span class="list">(<span class="title">options</span><span class="body">)</span></span>{</div><div class="line">    options = $.extend<span class="list">(<span class="body">{</div><div class="line">        render : function<span class="list">(<span class="title">option</span><span class="body">)</span></span>{</div><div class="line">            return $<span class="list">(<span class="body">'&lt;li&gt;',{</div><div class="line">                html : option.text<span class="list">(<span class="body">)</span></span></div><div class="line">            })</span></span><span class="comment">;</span></div><div class="line">        },</div><div class="line">        className : ''</div><div class="line">    },options)</span></span><span class="comment">;</span></div><br><div class="line">// More code will be added here.</div><br><div class="line">}</div><div class="line">})</span></span><span class="list">(<span class="title">jQuery</span><span class="body">)</span></span><span class="comment">;</span></div></code></pre>
+<p>render方法获取一个option参数，返回一个li元素，并直接包含在下拉列表中。这便可以解决上面的第一个问题。关于extend的详细用法可以参考这里。
+
+</p>
+<p><img src="http://cdn.tutorialzine.com/wp-content/uploads/2011/02/jquery-css3-select-replacement-plugin.jpg" alt="p1">
+
+</p>
+<p>在我们准备解决第2个问题前，让我们看看插件如何调用：
+
+</p>
+<pre><code><div class="line"><span class="variable">$(</span>document).ready(function(){  <span class="variable">$(</span><span class="string">'select'</span>).tzSelect(); });</div></code></pre>
+<p>从上面的示例中可以发现，我们为页面上的每一个select元素都调用了插件。我们可以使用“this”关键字来使用这些元素。
+
+</p>
+<pre><code><div class="line"><span class="keyword">return</span> <span class="keyword">this</span>.each(<span class="reserved">function</span>(){</div><br><div class="line">    <span class="regexp">//</span> The <span class="string">"this"</span> points to the current select element:</div><br><div class="line">    <span class="reserved">var</span> select = $(<span class="keyword">this</span>);</div><br><div class="line">    <span class="reserved">var</span> selectBoxContainer = $(<span class="string">'&lt;div&gt;'</span>,{</div><div class="line">        width        : select.outerWidth(),</div><div class="line">        className    : <span class="string">'tzSelect'</span>,</div><div class="line">        html        : <span class="string">'&lt;div class="selectBox"&gt;&lt;/div&gt;'</span></div><div class="line">    });</div><br><div class="line">    <span class="reserved">var</span> dropDown = $(<span class="string">'&lt;ul&gt;'</span>,{className:<span class="string">'dropDown'</span>});</div><div class="line">    <span class="reserved">var</span> selectBox = selectBoxContainer.find(<span class="string">'.selectBox'</span>);</div><br><div class="line">    <span class="regexp">//</span> Looping though the options <span class="keyword">of</span> the original select element</div><br><div class="line">    <span class="keyword">if</span>(options.className){</div><div class="line">        dropDown.addClass(options.className);</div><div class="line">    }</div><br><div class="line">    select.find(<span class="string">'option'</span>).each(<span class="reserved">function</span>(i){</div><div class="line">        <span class="reserved">var</span> option = $(<span class="keyword">this</span>);</div><br><div class="line">        <span class="keyword">if</span>(i==select.attr(<span class="string">'selectedIndex'</span>)){</div><div class="line">            selectBox.html(option.text());</div><div class="line">        }</div><br><div class="line">        <span class="regexp">//</span> As <span class="keyword">of</span> jQuery <span class="number">1.4</span><span class="number">.3</span> we can access HTML5</div><div class="line">        <span class="regexp">//</span> data attributes <span class="reserved">with</span> the data() method.</div><br><div class="line">        <span class="keyword">if</span>(option.data(<span class="string">'skip'</span>)){</div><div class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</div><div class="line">        }</div><br><div class="line">        <span class="regexp">//</span> Creating a dropdown item according to the</div><div class="line">        <span class="regexp">//</span> data-icon <span class="keyword">and</span> data-html-text HTML5 attributes:</div><br><div class="line">        <span class="reserved">var</span> li = options.render(option);</div><br><div class="line">        li.click(<span class="reserved">function</span>(){</div><br><div class="line">            selectBox.html(option.text());</div><div class="line">            dropDown.trigger(<span class="string">'hide'</span>);</div><br><div class="line">            <span class="regexp">//</span> When a click occurs, we are also reflecting</div><div class="line">            <span class="regexp">//</span> the change <span class="literal">on</span> the original select element:</div><div class="line">            select.val(option.val());</div><br><div class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        });</div><br><div class="line">        dropDown.append(li);</div><div class="line">    });</div><br><div class="line">    selectBoxContainer.append(dropDown.hide());</div><div class="line">    select.hide().after(selectBoxContainer);</div><br><div class="line">    <span class="regexp">//</span> Binding custom show <span class="keyword">and</span> hide events <span class="literal">on</span> the dropDown:</div><br><div class="line">    dropDown.bind(<span class="string">'show'</span>,<span class="reserved">function</span>(){</div><br><div class="line">        <span class="keyword">if</span>(dropDown.<span class="keyword">is</span>(<span class="string">':animated'</span>)){</div><div class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        }</div><br><div class="line">        selectBox.addClass(<span class="string">'expanded'</span>);</div><div class="line">        dropDown.slideDown();</div><br><div class="line">    }).bind(<span class="string">'hide'</span>,<span class="reserved">function</span>(){</div><br><div class="line">        <span class="keyword">if</span>(dropDown.<span class="keyword">is</span>(<span class="string">':animated'</span>)){</div><div class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">        }</div><br><div class="line">        selectBox.removeClass(<span class="string">'expanded'</span>);</div><div class="line">        dropDown.slideUp();</div><br><div class="line">    }).bind(<span class="string">'toggle'</span>,<span class="reserved">function</span>(){</div><div class="line">        <span class="keyword">if</span>(selectBox.hasClass(<span class="string">'expanded'</span>)){</div><div class="line">            dropDown.trigger(<span class="string">'hide'</span>);</div><div class="line">        }</div><div class="line">        <span class="keyword">else</span> dropDown.trigger(<span class="string">'show'</span>);</div><div class="line">    });</div><br><div class="line">    selectBox.click(<span class="reserved">function</span>(){</div><div class="line">        dropDown.trigger(<span class="string">'toggle'</span>);</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    });</div><br><div class="line">    <span class="regexp">//</span> If we click anywhere <span class="literal">on</span> the page, <span class="keyword">while</span> the</div><div class="line">    <span class="regexp">//</span> dropdown <span class="keyword">is</span> shown, it <span class="keyword">is</span> going to be hidden:</div><br><div class="line">    $(document).click(<span class="reserved">function</span>(){</div><div class="line">        dropDown.trigger(<span class="string">'hide'</span>);</div><div class="line">    });</div><br><div class="line">});</div></code></pre>
+<p>以上的代码基本就是今天需要转换的内容了~
+
+</p>
+<p>其中一个重要的改变就是我们将<code>$(this)</code>赋给了select变量，而不是像过去一样使用硬编码<code>（$(&#39;select.makeMeFancy&#39;)）</code>的方式，那样会限制代码的使用范围。 
+
+</p>
+<p>其他的改变就是我们采用传参的方式调用render方法来生成下来菜单的内容。将上面的代码联合起来，就是插件的完整内容了。 将这个插件代码放在一个单独的文件中用于解决第三个问题。但是，就像我前面提到的，我有意的将获取data属性值的代码移除了，以便使我们的插件更加轻便。对应的，我们必须在调用插件的时候，传递一个定制的输出函数。
+
+</p>
+<pre><code><div class="line">$(document).ready(function(){</div><br><div class="line">$('select.makeMeFancy').tzSelect({</div><div class="line">    render : function(option){</div><div class="line">        return $('<span class="tag">&lt;<span class="title">li</span>&gt;</span>',{</div><div class="line">            html:    '<span class="tag">&lt;<span class="title">img</span> <span class="attribute">src</span>=<span class="value">"'+option.data('icon')+'"</span> /&gt;</span><span class="tag">&lt;<span class="title">span</span>&gt;</span>'+</div><div class="line">                    option.data('html-text')+'<span class="tag">&lt;/<span class="title">span</span>&gt;</span>'</div><div class="line">        });</div><div class="line">    },</div><div class="line">    className : 'hasDetails'</div><div class="line">});</div><br><div class="line">// Calling the default version of the dropdown</div><div class="line">$('select.regularSelect').tzSelect();</div><br><div class="line">});</div></code></pre>
+<p>到这里，我们的jQuery插件就完成了。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2011-05-14T00:00:00.000Z"><a href="/2011/05/14/2011-05-14-google-app-engine-2/">May 14, 2011</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2011/05/14/2011-05-14-google-app-engine-2/">Google App Engine系列：组织你的项目</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>在这个系列的第二部分，我们将展示项目的目录结构并创建必须的配置文件。 
+
+</p>
+<p>目录结构 每一个App Engine应用根目录都必须存在一些配置文件。在我们的例子中是app.yame、index.yaml和cron.yaml。其他的目录结构随意。 清晰起见，“仪表版”应用的目录结构如下：
+
+</p>
+<p><img src="http://cdn.tutorialzine.com/wp-content/uploads/2011/02/directory-structure-app-engine-application.jpg" alt="p1">
+
+</p>
+<p>一些文件夹的用途如下： “assets”包括图片、样式表以及脚本文件； “config”包括一个含有基本配置选项的python文件，内容包括需要获取的url地址、应用的名称等。这个文件是独立于App Engine的yaml文件的； “model”、“view”、“controller”文件夹是按照mvc架构创建的python源文件； 当有新的request请求时，main.py文件是首先被访问的。通过它将各个不同的请求发送到相应的控制器，我们将在下一部分进行讲解。 配置文件 就像你在上一篇中看到的，当发布你自己的“运行时间仪表版”的时候，需要编辑一些文件。这些是App Engine的配置文件，用于定义你的应用语言，标识符以及版本信息。 这些配置信息采用yaml文件格式。这种格式的设计是用来处理一些简单数据的序列化，以及用来表示一些程序语言中通常的数据格式，例如：数字、数组、字符串、数值等等，以便更适合存储配置数据。 
+
+</p>
+<pre><code><div class="line">app.yaml</div><div class="line"><span class="method">application:</span> tutorialzine-dashboard </div><div class="line"><span class="method">version:</span> <span class="number">1</span> </div><div class="line"><span class="method">runtime:</span> python </div><div class="line"><span class="method">api_version:</span> <span class="number">1</span>  </div><div class="line"><span class="method">builtins:</span> - </div><div class="line"><span class="method">datastore_admin:</span> on  </div><div class="line"><span class="method">handlers:</span>  - <span class="method">url:</span> /assets   </div><div class="line"><span class="method">static_dir:</span> assets  - <span class="method">url:</span> /favicon.ico   </div><div class="line"><span class="method">static_files:</span> assets/img/favicon.ico   </div><div class="line"><span class="method">upload:</span> assets/img/favicon.ico  - <span class="method">url:</span> /crons/.*   </div><div class="line"><span class="method">script:</span> main.py   <span class="method">login:</span> admin  - <span class="method">url:</span> /generate-test-data/   </div><div class="line"><span class="method">script:</span> main.py   <span class="method">login:</span> admin  - <span class="method">url:</span> .*   <span class="method">script:</span> main.py</div></code></pre>
+<p>app.yaml是你应用程序主要的配置文件。当你创建新的应用的时候，app engine launcher会自动帮你创建这个文件。你可以从这里了解更多。 头两行包含了应用的标识符和版本。标识符用来指向你在appengine.google.com上创建的应用。App Engine通过版本属性管理应用的多个版本。通过控制面板，你能够随时发布或者很容易的回滚到以前的版本。 builtins指令可以使你在App Engine控制面板中启用数据存储管理，方便检测和删除数据。 最后是handlers，可以通过正则表达式映射到对应的脚本处理程序。你需要通过“static_files”或者“static_dir”指定你的静态文件地址。在上面的代码中可以看到我指定了所有访问dashboard.tutorialzine.com/assets的请求都指向到了assets目录。 你也可以选择性的指定某些地址只有应用管理员能够访问。在上面我使用这个选项指定/ crons / URL只有这个应用程序管理员和cron服务能够访问,以防止有人触发cron脚本。
+
+</p>
+<p><img src="http://cdn.tutorialzine.com/wp-content/uploads/2011/02/uptime-dashboard-app-engine.jpg" alt="p2">
+
+</p>
+<pre><code><div class="line">crons.yaml</div><div class="line">- <span class="method">description:</span> <span class="class">Five</span> minute ping   <span class="method">url:</span> /crons/<span class="number">5</span>min/   <span class="method">schedule:</span> every <span class="number">5</span> minutes </div><div class="line">- <span class="method">description:</span> <span class="class">Daily</span> averages   <span class="method">url:</span> /crons/<span class="number">1</span>day/   <span class="method">schedule:</span> every day <span class="number">00</span>:<span class="number">00</span></div></code></pre>
+<p>crons.yaml配置了cron服务。上面的代码告知服务每隔5分钟执行一次/crons/5min，每天午夜执行一次/crons/1day/。这些地址通过正则表达式精确的匹配http请求，这意味着即使执行特定地址你也不需要任何特殊的准备（meaning that you do not need any special preparations to execute a certain address from cron）。 index.yaml是由app launcher自动创建的，你可以在里面定义数据存储所需要使用的索引。索引非常重要，因为它可以加快你应用的查询速度，这也是为什么简单查询也会自动创建他们。所幸我们的应用非常简单，不需要修改index.yaml。 这样我们就成功的配置了新的app engine应用了。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+
+  <nav id="pagination">
+  
+  
+  <div class="clearfix"></div>
+</nav>
+</div></div>
+    <aside id="sidebar" class="alignright">
+<div class="search">
+  <form action="http://google.com/search" method="get" accept-charset="utf-8">
+    <input type="text" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:xiongbo.me">
+  </form>
+</div>
+
+
+
+
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Project/">Project</a><small>1</small></li>
+  
+    <li><a href="/tags/Rails-Recipes/">Rails-Recipes</a><small>3</small></li>
+  
+    <li><a href="/tags/design/">design</a><small>1</small></li>
+  
+    <li><a href="/tags/project/">project</a><small>1</small></li>
+  
+    <li><a href="/tags/reading-notes/">reading-notes</a><small>3</small></li>
+  
+    <li><a href="/tags/summary/">summary</a><small>3</small></li>
+  
+    <li><a href="/tags/translate/">translate</a><small>3</small></li>
+  
+  </ul>
+</div>
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 xiongbo
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'xiongbo';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/count.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>

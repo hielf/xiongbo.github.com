@@ -1,0 +1,268 @@
+﻿<!DOCTYPE HTML>
+<html>
+  <head>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>公共资源交易对比统计</title>
+		<link rel="stylesheet" href="../css/bootstrap/css/bootstrap.min.css" type="text/css" media="screen" charset="utf-8">
+		<link rel="stylesheet" href="../css/common.css" type="text/css" media="screen" charset="utf-8">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <style type="text/css">
+      #accomplishment_link_relative_sum, #accomplishment_link_relative_sum_detail {
+        width : 450px;
+        height: 400px;
+      }
+      #accomplishment_link_relative_num, #accomplishment_link_relative_num_detail {
+        width : 450px;
+        height: 400px;
+      }
+      #transaction_ratio {
+        width : 450px;
+        height: 400px;
+				opacity: 0;
+      }
+      #accomplishment_year_to_year {
+        width : 900px;
+        height: 400px;
+      }
+      #accomplishment_num {
+        width : 450px;
+        height: 400px;
+      }
+    </style>
+  </head>
+  <body>
+		<div class="container">
+			<h1 class="center pdv20">公共资源交易项目<strong class="lightblue">综合对比</strong>统计</h1>
+			<div class="row">
+				<p class="bg-lightblue fnormal">截至到2012年6月，全市六大交易中心交易额较去年同比<em class="red fbig">增长37.9亿元</em>，同比增长率<em class="red fbigger">6.4%</em></p>
+			</div>
+			<div class="row top-line pdv20">
+				<div id="accomplishment_year_to_year" class="span12"></div>
+			</div>
+			<div class="row">
+				<h4 class="right lh30 pdv20"><span class="label label-success" id="check_accomplishment_detail"><i class="icon-list-alt"></i>查看详细同比数据</span></h4>
+			</div>
+			<div class="row" id="accomplishment_detail" style="display:none" >
+				<table class="table table-striped" >
+					<thead>
+						<tr><th>月份</th><th>2011年月度交易额</th><th>2012年月度交易额</th><th>同比增长</th></tr>
+					</thead>
+					<tbody>
+						<tr><td>1</td><td>76.12万元</td><td>67.59亿元</td><td><span class="badge badge-error">11%</span></td></tr>
+						<tr><td>2</td><td>31.01万元</td><td>34.4亿元</td><td><span class="badge badge-success">11%</span></td></tr>
+						<tr><td>3<td>63.23亿元</td><td>94.29亿元</td><td><span class="badge badge-success">49%</span></td></tr>
+						<tr><td>4</td><td>163.23亿元</td><td>133.26亿元</td><td><span class="badge badge-error">18%</span></td></tr>
+						<tr><td>5</td><td>120.09亿元</td><td>168.42亿元</td><td><span class="badge badge-success">40%</span></td></tr>
+						<tr><td>6</td><td>135.64亿元</td><td>129.26亿元</td><td><span class="badge badge-error">4.7%</span></td></tr>
+						<tr><td>7</td><td>99.87亿万元</td><td></td><td></td></tr>
+						<tr><td>8</td><td>109.21亿元</td><td></td><td></td></tr>
+						<tr><td>9</td><td>122.73亿元</td><td></td><td></td></tr>
+						<tr><td>10</td><td>190.22亿元</td><td></td><td></td></tr>
+						<tr><td>11</td><td>100.45亿元</td><td></td><td></td></tr>
+						<tr><td>12</td><td>120.33亿元</td><td></td><td></td></tr>
+					</tbody>
+				</table>
+				<p class="top-line down-line right">图示说明：<span class="badge badge-info">正增长</span><span class="badge badge-error">负增长</span></p>
+			</div>
+			<div class="row top-line pdv50">
+				<div id="accomplishment_link_relative_sum" class="span6 mgv30"></div>
+				<div id="accomplishment_link_relative_sum_detail" class="span6">
+				<table class="table table-striped" >
+					<thead>
+						<tr><th>交易中心</th><th>本期交易额</th><th>上期交易额</th><th>环比增长</th></tr>
+					</thead>
+					<tbody>
+						<tr><td>财政采管办</td><td>6.21亿元</td><td>4.45亿元</td><td><span class="badge badge-success">39%</span></td></tr>
+						<tr><td>建设工程交易中心</td><td>50.06亿元</td><td>61.12亿元</td><td><span class="badge badge-error">34%</span></td></tr>
+						<tr><td>卫生局采管办</td><td>0.91亿元</td><td>1.11亿元</td><td><span class="badge badge-error">18%</span></td></tr>
+						<tr><td>农村产权交易所</td><td>0.83亿元</td><td>1.09亿元</td><td><span class="badge badge-error">23%</span></td></tr>
+						<tr><td>土地交易中心</td><td>60.22亿元</td><td>32.54亿元</td><td><span class="badge badge-success">5%</span></td></tr>
+						<tr><td>专利交易中心</td><td>0.03亿元</td><td>0.11亿元</td><td><span class="badge badge-error">73%</span></td></tr>
+					</tbody>
+				</table>
+				<p class="top-line down-line right">图示说明：<span class="badge badge-success">正增长</span><span class="badge badge-error">负增长</span></p> 
+			</div>
+			</div>
+			<div class="row top_line pdv50">
+				<div id="accomplishment_link_relative_num" class="span6"></div>
+				<div id="accomplishment_link_relative_num_detail" class="span6">
+				<table class="table table-striped" >
+					<thead>
+						<tr><th>交易中心</th><th>本期交易数</th><th>上期交易数</th><th>环比增长</th></tr>
+					</thead>
+					<tbody>
+						<tr><td>财政采管办</td><td>84宗</td><td>51宗</td><td><span class="badge badge-success">65%</span></td></tr>
+						<tr><td>建设工程交易中心</td><td>150宗</td><td>209宗</td><td><span class="badge badge-error">28%</span></td></tr>
+						<tr><td>卫生局采管办</td><td>15宗</td><td>53宗</td><td><span class="badge badge-error">72%</span></td></tr>
+						<tr><td>农村产权交易所</td><td>38宗</td><td>21宗</td><td><span class="badge badge-success">81%</span></td></tr>
+						<tr><td>土地交易中心</td><td>11宗</td><td>19宗</td><td><span class="badge badge-error">42%</span></td></tr>
+						<tr><td>专利交易中心</td><td>31宗</td><td>27宗</td><td><span class="badge badge-success">15%</span></td></tr>
+					</tbody>
+				</table> 
+				<p class="top-line down-line right">图示说明：<span class="badge badge-success">正增长</span><span class="badge badge-error">负增长</span></p> 
+			</div>
+			</div>
+			<h4 class="right under-line lightblue top-line pdv20">数据来源：六大交易中心 截至至2012年6月30日</h4> 
+		</div>
+<!--[if IE]>
+<script type="text/javascript" src="../FlashCanvasPro/bin/flashcanvas.js"></script>
+<![endif]-->
+<script type="text/javascript" src="../flotr2/flotr2.min.js"></script>
+<script type="text/javascript">
+(function () {
+
+	var
+		accomplishment_year_to_year = document.getElementById('accomplishment_year_to_year'),
+		accomplishment_link_relative_sum = document.getElementById('accomplishment_link_relative_sum'),
+		accomplishment_link_relative_num = document.getElementById('accomplishment_link_relative_num'),
+		accomplishment_data_2011, accomplishment_data_2012, accomplishment_link_data, accomplishment_link_data_last, graph, graph_pie, offset, i;
+
+	// accomplishment_year_to_year 
+	var
+		line_2011 = {
+			data : [[1,76.12],[2,31.01],[3,63.23],[4,163.23],[5,120.09],[6,135.64],[7,99.87],[8,109.21],[9,122.73],[10,190.22],[11,100.45],[12,120.33]], 
+			label : '2011年交易额统计',
+			lines : {
+				fill : true,
+				show : true
+			},
+			points : {show : true }
+		},
+		line_2012 = {
+			data : [[1,67.59],[2,34.40],[3,94.29],[4,133.26],[5,168.42],[6,129.26]],
+			label : '2012年交易额统计',
+			lines : {
+				fill : true,
+				show : true
+			},
+			points : {show : true}
+		},
+		options,
+		start
+
+		options = {
+			title: '2012年公共资源交易总额同比分析',
+			subtitle: '(截止至2012年6月)',
+			xaxis : {
+				min: 1,
+				max: 6,
+				ticks : [[1,'一月'],[2,'二月'],[3,'三月'],[4,'四月'],[5,'五月'],[6,'六月'],[7,'七月'],[8,'八月'],[9,'九月'],[10,'十月'],[11,'十一月'],[12,'十二月']],
+				margin : true,
+				titleAligh : 'left'
+				},
+			mouse : {
+				track : true,
+				lineColor : 'purple',
+				relative : true,
+				position : 'ne',
+				sensibility : 1,
+				trackDecimals : 2,
+				trackFormatter : function (o) { return o.y + '亿元';}
+				},
+			crosshair : { mode : 'xy' }
+		}
+
+  function drawGraph (opts) {
+
+    var o = Flotr._.extend(Flotr._.clone(options), opts || {});
+
+    return Flotr.draw(
+      accomplishment_year_to_year,
+      [ line_2011, line_2012 ],
+      o
+    );
+  }
+
+	g_accomplishment_year_to_year = drawGraph(); 
+	
+	function initializeDrag (e) {
+    start = g_accomplishment_year_to_year.getEventPosition(e);
+    Flotr.EventAdapter.observe(document, 'mousemove', move);
+    Flotr.EventAdapter.observe(document, 'mouseup', stopDrag);
+  }
+
+  function move (e) {
+    var
+      end     = g_accomplishment_year_to_year.getEventPosition(e),
+      xaxis   = g_accomplishment_year_to_year.axes.x,
+      offset  = start.x - end.x;
+
+    g_accomplishment_year_to_year = drawGraph({
+      xaxis : {
+        min : xaxis.min + offset,
+        max : xaxis.max + offset
+      }
+    });
+    Flotr.EventAdapter.observe(g_accomplishment_year_to_year.overlay, 'mousedown', initializeDrag);
+  }
+
+  function stopDrag () {
+    Flotr.EventAdapter.stopObserving(document, 'mousemove', move);
+  }
+
+  Flotr.EventAdapter.observe(g_accomplishment_year_to_year.overlay, 'mousedown', initializeDrag);
+
+
+	// accomplishment_link_relative_sum
+  var
+    link_last = { label : '2012年5月', data : [[0, 61.12], [1, 32.54], [2, 4.45], [3, 1.11], [4, 1.09], [5, 0.11]] },
+    link = { label : '2012年6月', data : [[0, 50.06], [1, 60.22], [2, 6.21], [3, 0.91], [4, 0.83], [5, 0.03]] },
+    g_accomplishment_link_realtive_sum, ticks_sum;
+
+  ticks_sum = [
+    [0, "建设工程"],
+    [1, "土地交易"],
+    [2, "政府采购"],
+    [3, "医用物资"],
+    [4, "农村产权"],
+    [5, "知识产权"]
+  ];
+    
+  g_accomplishment_link_realtive_sum = Flotr.draw(accomplishment_link_relative_sum, [ link_last, link ], {
+    radar : { show : true}, 
+		colors: ['#4499EE', '#43A102'],
+    grid  : { circular : true, minorHorizontalLines : true}, 
+    yaxis : { min : 0, max : 62, minorTickFreq : 2}, 
+    xaxis : { ticks : ticks_sum},
+		title : '2012年各中心交易额环比分析(6月/5月)',
+  });
+	
+	// accomplishment_link_relative_num
+  var
+    link_last = { label : '2012年5月', data : [[0, 62], [1, 19], [2, 51], [3, 24], [4, 21], [5, 27]] },
+    link = { label : '2012年6月', data : [[0, 78], [1, 11], [2, 70], [3, 28], [4, 38], [5, 8]] },
+    g_accomplishment_link_realtive_num, ticks_num;
+
+  ticks_num = [
+    [0, "建设工程"],
+    [1, "土地交易"],
+    [2, "政府采购"],
+    [3, "医用物资"],
+    [4, "农村产权"],
+    [5, "知识产权"]
+  ];
+    
+  g_accomplishment_link_realtive_num = Flotr.draw(accomplishment_link_relative_num, [ link_last, link ], {
+    radar : { show : true}, 
+		colors: ['#4499EE', '#FFBB1C'],
+    grid  : { circular : true, minorHorizontalLines : true}, 
+    yaxis : { min : 0, max : 80, minorTickFreq : 2}, 
+    xaxis : { ticks : ticks_num},
+		title : '2012年各中心交易量环比分析(6月/5月)',
+  }); 
+
+	//event reg
+	$("#check_accomplishment_detail").toggle(
+			function(){
+				$("#accomplishment_detail").slideDown('slow');
+			},
+			function(){
+				$("#accomplishment_detail").slideUp("slow"); 
+			}
+	); 
+})();
+
+</script>
+  </body>
+</html>
+

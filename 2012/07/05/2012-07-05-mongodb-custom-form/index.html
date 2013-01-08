@@ -1,0 +1,223 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>基于mongodb的自定义表单实现思考 | xiongbo.ME</title>
+  <meta name="author" content="xiongbo">
+  
+  <meta name="description" content="如何通过mongoid构建表单的数据结构
+通过mongoid提供的继承行为，可以有效的表现表单的字段，我的想法如下，这样各类字段不仅能作为XboForm的嵌入文档，同时也可以满足不同字段的个性化信息，如果不使用继承，就只能在模型中包括所有可能的字段属性
+
+
+123456789101112131415">
+  
+  
+  <meta name="viewport" content="width=device-width; initial-scale=1; maximum-scale=1">
+
+  <meta property="og:title" content="基于mongodb的自定义表单实现思考"/>
+  <meta property="og:site_name" content="xiongbo.ME"/>
+
+  <link rel="alternate" href="/atom.xml" title="xiongbo.ME" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+  
+</head>
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">xiongbo.ME</a></h1>
+  <h2><a href="/">project code and simple life</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div></header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper">
+<article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2012-07-05T00:00:00.000Z"><a href="/2012/07/05/2012-07-05-mongodb-custom-form/">Jul 5, 2012</a></time>
+      
+      
+  
+    <h1 class="title">基于mongodb的自定义表单实现思考</h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h4>如何通过mongoid构建表单的数据结构</h4>
+<p>通过mongoid提供的继承行为，可以有效的表现表单的字段，我的想法如下，这样各类字段不仅能作为XboForm的嵌入文档，同时也可以满足不同字段的个性化信息，如果不使用继承，就只能在模型中包括所有可能的字段属性
+
+</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div><div class="line-number">15</div><div class="line-number">16</div><div class="line-number">17</div><div class="line-number">18</div><div class="line-number">19</div><div class="line-number">20</div><div class="line-number">21</div><div class="line-number">22</div><div class="line-number">23</div><div class="line-number">24</div><div class="line-number">25</div><div class="line-number">26</div></code></pre></td><td class="code"><pre><code><div class="line"> </div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">XboField</span></span></div><div class="line">  <span class="keyword">include</span> <span class="constant">Mongoid::Document</span></div><div class="line">  <span class="keyword">include</span> <span class="constant">Mongoid::Timestamps</span> </div><div class="line">  field <span class="symbol">:name</span></div><div class="line">  field <span class="symbol">:label</span></div><div class="line">  field <span class="symbol">:help_text</span></div><div class="line">  field <span class="symbol">:required</span>, <span class="symbol">type:</span> <span class="constant">Boolean</span></div><div class="line">  field <span class="symbol">:type</span></div><div class="line">  validates_presence_of <span class="symbol">:name</span> </div><div class="line">  embedded_in <span class="symbol">:xbo_form</span> </div><div class="line"><span class="keyword">end</span></div><br><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">XboString</span> <span class="inheritance">&lt; <span class="parent">XboField</span></span></span></div><div class="line">  field <span class="symbol">:max_length</span>, <span class="symbol">type:</span> <span class="constant">Integer</span></div><div class="line"><span class="keyword">end</span></div><br><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">XboEmail</span> <span class="inheritance">&lt; <span class="parent">XboField</span></span></span></div><div class="line"><span class="keyword">end</span></div><br><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">XboSelect</span> <span class="inheritance">&lt; <span class="parent">XboField</span></span></span></div><div class="line"><span class="keyword">end</span></div><br><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">XboTextarea</span> <span class="inheritance">&lt; <span class="parent">XboField</span></span></span></div><div class="line">  field <span class="symbol">:word_limit</span>, <span class="symbol">type:</span> <span class="constant">Integer</span></div><div class="line"><span class="keyword">end</span></div></code></pre></td></tr></table></figure>
+
+<h4>编辑表单字段的时候，如何表示不同的表单字段呢？</h4>
+<p>可以通过rails中的fields_for在同一个提交表单中表现不同的字段项，需要注意的是由于各个字段作为内嵌文档是以数组的形式保存的，不能采用形如rails guide中的a_from.b_fields.text_field形式，而是要先通过build方法生成实例，再进行使用，以email字段为例：
+
+</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div></code></pre></td><td class="code"><pre><code><div class="line">    </div><div class="line">&lt;% xbo_email = <span class="variable">@xbo_form</span>.xbo_fields.build({},<span class="constant">XboEmail</span>) %&gt;</div><div class="line">&lt;%= form_for <span class="variable">@xbo_form</span>, <span class="symbol">url:</span> xbo_forms_path <span class="keyword">do</span> |f| %&gt;</div><div class="line">  &lt;%= f.label <span class="string">'名称'</span> %&gt;</div><div class="line">  &lt;%= f.text_field <span class="symbol">:name</span> %&gt;</div><br><div class="line">  &lt;%= fields_for xbo_email <span class="keyword">do</span> |xbo_email| %&gt;</div><div class="line">    &lt;%= xbo_email.label <span class="string">'字段名称：'</span> %&gt;</div><div class="line">    &lt;%= xbo_email.text_field <span class="symbol">:name</span> %&gt;</div><div class="line">    &lt;%= xbo_email.label <span class="string">'字段标签：'</span> %&gt;</div><div class="line">    &lt;%= xbo_email.text_field <span class="symbol">:label</span> %&gt;</div><div class="line">  &lt;% <span class="keyword">end</span> %&gt; </div><div class="line">&lt;% <span class="keyword">end</span> %&gt;</div></code></pre></td></tr></table></figure>
+
+<p>这样，当提交表单的时候，就会产生形如以下的参数形式：
+
+</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div></code></pre></td><td class="code"><pre><code><div class="line">{</div><div class="line">  id:xxxxxxx,</div><div class="line">  name:"zzzz",</div><div class="line">  XboEmail:{</div><div class="line">      _type: "XboEmail",</div><div class="line">      name: "xxxxx"</div><div class="line">      label: "yyyyyy"</div><div class="line">    }  </div><div class="line">}</div></code></pre></td></tr></table></figure>
+
+<p>当对表单项进行保存的时候，可以通过_type属性，判断当前的字段类别，从而进行保存。
+
+</p>
+<p>但是这种设计其实是有问题的，不能因为字段在物理形式上是通过内嵌文档的方式保存在表单的集合中，就把对字段属性的修改也放在了表单的控制逻辑中。正确的方式应该是采用xbo_fields的控制器进行处理。可以采用如下的方式对field设置更明确的控制器。
+
+</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div></code></pre></td><td class="code"><pre><code><div class="line">resources <span class="symbol">:xbo_forms</span> <span class="keyword">do</span></div><div class="line">  resources <span class="symbol">:xbo_fields</span>, <span class="symbol">controller:</span> <span class="string">"xbo_form_xbo_fields"</span></div><div class="line"><span class="keyword">end</span></div></code></pre></td></tr></table></figure>
+
+<hr>
+<p><em>2012-7-12更新</em>
+
+</p>
+<h4>表单模板</h4>
+<p>因为在进行表单设计的时候，表单项往往是动态生成的。并且，每个表单字段所包含的属性都不尽相同。所以应该针对不同的字段，设计不同的表单模板，以下拉菜单为例:
+
+</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div><div class="line-number">15</div><div class="line-number">16</div><div class="line-number">17</div><div class="line-number">18</div><div class="line-number">19</div><div class="line-number">20</div><div class="line-number">21</div><div class="line-number">22</div><div class="line-number">23</div><div class="line-number">24</div><div class="line-number">25</div><div class="line-number">26</div><div class="line-number">27</div><div class="line-number">28</div><div class="line-number">29</div><div class="line-number">30</div><div class="line-number">31</div><div class="line-number">32</div><div class="line-number">33</div><div class="line-number">34</div><div class="line-number">35</div><div class="line-number">36</div><div class="line-number">37</div><div class="line-number">38</div><div class="line-number">39</div><div class="line-number">40</div><div class="line-number">41</div><div class="line-number">42</div><div class="line-number">43</div><div class="line-number">44</div><div class="line-number">45</div><div class="line-number">46</div><div class="line-number">47</div><div class="line-number">48</div><div class="line-number">49</div><div class="line-number">50</div><div class="line-number">51</div><div class="line-number">52</div><div class="line-number">53</div><div class="line-number">54</div><div class="line-number">55</div><div class="line-number">56</div><div class="line-number">57</div><div class="line-number">58</div><div class="line-number">59</div><div class="line-number">60</div><div class="line-number">61</div><div class="line-number">62</div><div class="line-number">63</div><div class="line-number">64</div><div class="line-number">65</div><div class="line-number">66</div><div class="line-number">67</div><div class="line-number">68</div><div class="line-number">69</div><div class="line-number">70</div><div class="line-number">71</div><div class="line-number">72</div><div class="line-number">73</div><div class="line-number">74</div><div class="line-number">75</div><div class="line-number">76</div><div class="line-number">77</div><div class="line-number">78</div><div class="line-number">79</div><div class="line-number">80</div><div class="line-number">81</div><div class="line-number">82</div><div class="line-number">83</div><div class="line-number">84</div><div class="line-number">85</div><div class="line-number">86</div><div class="line-number">87</div></code></pre></td><td class="code"><pre><code><div class="line">------—_xbo_dropdown.html.erb----------</div><br><div class="line">&lt;h4&gt;下拉菜单字段类型&lt;/h4&gt;</div><br><div class="line">&lt;%= form_for field, url: xbo_form_xbo_field_path(xbo_form, field), remote: true, method: "put" do |xbo_dropdown| %&gt;</div><div class="line">  &lt;%= xbo_dropdown.label '字段名称：' %&gt;</div><div class="line">  &lt;%= xbo_dropdown.text_field :name %&gt;</div><div class="line">  &lt;%= xbo_dropdown.label '字段标签：' %&gt;</div><div class="line">  &lt;%= xbo_dropdown.text_field :label %&gt;</div><div class="line">  &lt;%= xbo_dropdown.label '提示文字：' %&gt;</div><div class="line">  &lt;%= xbo_dropdown.text_field :help_text %&gt;</div><div class="line">  &lt;%= xbo_dropdown.label '下拉参数列表' %&gt;</div><br><div class="line">  &lt;%= select_tag :item_list_temp, options_for_select(field.item_list), prompt: '-----请选择----', id: "select_items" %&gt;</div><div class="line">  &lt;%= xbo_dropdown.hidden_field :item_list %&gt;</div><br><div class="line">  &lt;%= link_to '编辑参数', "#", id: "edit_dropdown_arg", title: "点击编辑下拉菜单参数" %&gt;</div><br><div class="line">  &lt;%= xbo_dropdown.submit "保存", class: "btn btn-primary", disable_with: "保存中..." %&gt;</div><div class="line">  &lt;%= link_to '删除', xbo_form_xbo_field_path(xbo_form, field), confirm: '确定删除该表单字段吗？', method: :delete, remote: true %&gt;</div><div class="line">&lt;% end %&gt; </div><div class="line">//下拉菜单参数操作</div><div class="line">&lt;div class="modal hide" id="arg_add"&gt;</div><div class="line">  &lt;div class="modal-header"&gt;</div><div class="line">    &lt;button type="button" class="close" data-dismiss="modal"&gt;×&lt;/button&gt;</div><div class="line">    &lt;h3&gt;定义下拉菜单选项参数&lt;/h3&gt;</div><div class="line">  &lt;/div&gt;</div><br><div class="line">  &lt;div class="modal-body"&gt;</div><div class="line">  &lt;div&gt;</div><div class="line">    &lt;input type="text" id="dropdown_text" class="input-small" placeholder="参数文字"&gt;&lt;/input&gt;</div><div class="line">    &lt;input type="text" id="dropdown_value" class="input-small" placeholder="参数值"&gt;&lt;/input&gt;</div><div class="line">    &lt;input type="button" id="add_arg" class="btn btn-info" value="添加"&gt;&lt;/input&gt;</div><div class="line">  &lt;/div&gt; </div><div class="line">  &lt;div&gt;</div><div class="line">    &lt;table id="arg_list" class="table table-striped"&gt;</div><div class="line">      &lt;tr class="nodrop nodrag"&gt;&lt;th&gt;参数名称&lt;/th&gt;&lt;th&gt;参数值&lt;/th&gt;&lt;th&gt;编辑&lt;/th&gt;&lt;th&gt;删除&lt;/th&gt;&lt;/tr&gt;</div><div class="line">    &lt;/table&gt;</div><br><div class="line">  &lt;/div&gt;</div><div class="line">  &lt;div class="modal-footer"&gt;</div><div class="line">    &lt;a href="#" class="btn" data-dismiss="modal"&gt;关闭&lt;/a&gt;</div><div class="line">    &lt;a href="#" id="add_to_dropdown" class="btn btn-primary" data-dismiss="modal"&gt;保存参数&lt;/a&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><br><div class="line">&lt;script type="text/javascript" charset="utf-8"&gt;</div><br><div class="line">$('#edit_dropdown_arg').tooltip({delay: {show: 500, hide: 100}}).click(function(){ </div><div class="line">    $('#arg_add').modal({</div><div class="line">      backdrop: true</div><div class="line">    });</div><div class="line">    $('#arg_list').tableDnD();</div><div class="line">    $('#add_to_dropdown').click(function(){</div><div class="line">      insert_into_select_items();</div><div class="line">    });</div><div class="line">  });</div><br><div class="line">$('#add_arg').click(function(){</div><div class="line">  var item_text = $('#dropdown_text').val()</div><div class="line">  var item_value = $('#dropdown_value').val()</div><div class="line">  $('#arg_list').append("&lt;tr class='arg'&gt;&lt;td&gt;" + item_text + "&lt;/td&gt;&lt;td&gt;" + item_value + "&lt;/td&gt;&lt;td&gt;&lt;a href='#'&gt;编辑&lt;/a&gt;&lt;/td&gt;&lt;td&gt;&lt;a href='#'&gt;删除&lt;/a&gt;&lt;/td&gt;&lt;/tr&gt;");</div><div class="line">  $('#arg_list').tableDnD(); </div><br><div class="line">  });</div><br><div class="line">function insert_into_select_items()</div><div class="line">{</div><div class="line">  var item_list = [];</div><div class="line">  var item_arrays = [];</div><br><div class="line">  $('#arg_list tr[class=arg]').each(function(){</div><div class="line">        //item_list.push([$(this).children().eq(0).html(),$(this).children().eq(1).html()]);</div><div class="line">      var _item = {"text": $(this).children().eq(0).html(), "value": $(this).children().eq(1).html()};</div><div class="line">      item_list.push(_item);</div><div class="line">      });</div><br><div class="line">  $.each(item_list,function(num,item){</div><div class="line">      $("#select_items").append("&lt;option value='" + item['value'] + "'&gt;" + item['text'] + "&lt;/option&gt;");</div><div class="line">      //var _item_array = new Array(item['text'], item['value'] + ";");</div><div class="line">      item_arrays.push(item['text'] + "_" + item['value']);</div><div class="line">      })</div><br><div class="line">  $("#xbo_dropdown_item_list").val(item_arrays);</div><div class="line">}</div><br><div class="line">&lt;/script&gt;</div></code></pre></td></tr></table></figure>
+
+<p>我们在表单项的模板中，不仅可以设计表单的特有样式，还可以嵌入表单项的特有属性的操作，当需要增加新的类型的表单项的时候，只需要设计新的表单项模板即可。
+
+</p>
+<h4>填写表单</h4>
+<p>由于每一类的表单字段都是动态的，因此不可能针对每类表单就生成对应的数据表。我采用的方式是将所有的表单数据都放在表单数据集合中(xbo_submissions)，根据不同的表单ID，读取不同的表单数据。而每一条表单数据的内容是以Hash的形式保存的。如下所示：
+
+</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">XboSubmission</span></span></div><div class="line">  <span class="keyword">include</span> <span class="constant">Mongoid::Document</span></div><div class="line">  </div><div class="line">  field <span class="symbol">:name</span>, <span class="symbol">type:</span> <span class="constant">String</span></div><div class="line">  field <span class="symbol">:content</span>, <span class="symbol">type:</span> <span class="constant">Hash</span></div><br><div class="line">  belongs_to <span class="symbol">:xbo_form</span></div><div class="line"><span class="keyword">end</span></div></code></pre></td></tr></table></figure>
+
+<p>因为mongodb本身就是文档型的数据库，所以保存在单一的文档中应该不是问题。同时，通过对&quot;xbo_form_id&quot;进行索引，也应该能有效的解决查询的问题。以下是提交数据的表单：
+
+</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div><div class="line-number">15</div><div class="line-number">16</div><div class="line-number">17</div><div class="line-number">18</div><div class="line-number">19</div><div class="line-number">20</div><div class="line-number">21</div><div class="line-number">22</div><div class="line-number">23</div></code></pre></td><td class="code"><pre><code><div class="line">&lt;%= form_for @xbo_submission, url: xbo_form_xbo_submissions_path(@xbo_form) do |f| %&gt;</div><div class="line">  &lt;%= f.hidden_field :name, placeholder: @xbo_form.name %&gt;</div><div class="line">  &lt;%= f.fields_for :content do |con| %&gt;</div><div class="line">    &lt;% @xbo_form.xbo_fields.each do |field| %&gt;</div><div class="line">      &lt;% case field._type %&gt;</div><div class="line">      &lt;% when "XboString" %&gt;</div><div class="line">        &lt;%= con.label field.label %&gt;</div><div class="line">        &lt;%= con.text_field field.name %&gt;</div><div class="line">      &lt;% when "XboDropdown" %&gt;</div><div class="line">        &lt;%= con.label field.label %&gt;</div><div class="line">        &lt;%= con.select field.name, options_for_select(field.item_list), prompt: "---请选择---" %&gt;</div><div class="line">      &lt;% when "XboEmail" %&gt;</div><div class="line">        &lt;%= con.label field.label %&gt; </div><div class="line">        &lt;div class='input-prepend'&gt;&lt;span class='add-on'&gt;&lt;i class='icon-envelope'&gt;&lt;/i&gt;&lt;/span&gt;&lt;%= con.text_field field.name %&gt;&lt;/div&gt; </div><div class="line">      &lt;% end %&gt;</div><div class="line">    &lt;% end %&gt;</div><div class="line">  &lt;% end %&gt;</div><br><div class="line">  &lt;div&gt;</div><div class="line">    &lt;%= f.submit '提交', class: "btn btn-primary" %&gt;</div><div class="line">    &lt;%= link_to '返回', xbo_form_xbo_submissions_path(@xbo_form) %&gt;</div><div class="line">  &lt;/div&gt;</div><div class="line">&lt;% end %&gt;</div></code></pre></td></tr></table></figure>
+      
+    </div>
+    <footer>
+      
+        
+        
+  
+  <div class="tags">
+    <a href="/tags/project/">project</a>
+  </div>
+
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="http://s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</div></div>
+    <aside id="sidebar" class="alignright">
+<div class="search">
+  <form action="http://google.com/search" method="get" accept-charset="utf-8">
+    <input type="text" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:xiongbo.me">
+  </form>
+</div>
+
+
+
+
+<div class="widget tag">
+  <h3 class="title">Tags</h3>
+  <ul class="entry">
+  
+    <li><a href="/tags/Project/">Project</a><small>1</small></li>
+  
+    <li><a href="/tags/Rails-Recipes/">Rails-Recipes</a><small>3</small></li>
+  
+    <li><a href="/tags/design/">design</a><small>1</small></li>
+  
+    <li><a href="/tags/project/">project</a><small>1</small></li>
+  
+    <li><a href="/tags/reading-notes/">reading-notes</a><small>3</small></li>
+  
+    <li><a href="/tags/summary/">summary</a><small>3</small></li>
+  
+    <li><a href="/tags/translate/">translate</a><small>3</small></li>
+  
+  </ul>
+</div>
+
+
+
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2013 xiongbo
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+<script type="text/javascript">
+var disqus_shortname = 'xiongbo';
+
+(function(){
+  var dsq = document.createElement('script');
+  dsq.type = 'text/javascript';
+  dsq.async = true;
+  dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+  (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+}());
+</script>
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
