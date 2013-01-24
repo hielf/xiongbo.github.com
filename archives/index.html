@@ -38,7 +38,245 @@
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
 
+
 <h2 class="archive-title">Archives</h2>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2013-01-24T06:34:43.000Z"><a href="/2013/01/24/2013-01-24-start-with-mvc3-and-dwz/">Jan 24, 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/01/24/2013-01-24-start-with-mvc3-and-dwz/">（MVC3 + DWZ）简易上手指南</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>项目已经做完了，我也对在做项目过程中遇到的一些开发问题进行了整理，编写了下面这篇简单的上手指南。
+
+</p>
+<p>这篇文章里没有为什么，只有遇到的问题和对应的解决办法，以及一些参考链接。
+
+</p>
+<p>我想表达的是，既然我会遇到这些问题，那么使用mvc3+dwz框架进行开发的其他同学也一定会遇到。
+
+</p>
+<p>而这些问题，有些很常规，有些有点刁钻，在网上查找解决方法往往也比较费时。
+
+</p>
+<p>所以，我希望这篇文档能够一定程度上提高大家开发的效率，减少不必要的麻烦。
+
+</p>
+<p>那么，开始吧！
+
+</p>
+<hr>
+<h2>准备工作</h2>
+<p><a href="http://msdn.microsoft.com/en-us/data/jj193542">从全新数据库开始</a>
+
+</p>
+<p><a href="http://msdn.microsoft.com/en-us/data/jj200620">从已有的数据库开始</a>
+
+</p>
+<p><em>值得注意的是需要安装Nuget和Power Tools两个插件,并且保证你的EF是5.0</em>
+
+</p>
+<p>这两篇文章主要是关于如何以code-first进行开发，一定要看。
+
+</p>
+<h2>Migration常用命令</h2>
+<p>在程序包管理控制台中通过以下命令操作数据库
+<code>Enable-Migrations</code> 用于启用Migration
+<code>Add-Migration migration-name</code> 用于添加新的migration,该命令会自动比较当前模型中所做的修改，生成对应的数据库操作语句
+<code>Update-Database</code> 用于将修改更新到数据库 
+这里是<a href="http://msdn.microsoft.com/en-us/data/jj591621">详细参考</a>
+
+</p>
+<h2>DWZ相关</h2>
+<p>因为DWZ是一个独立的富客户端框架，基本可以用来替换mvc的布局架构，它通过配置文件自动载入所需的框架信息，包括弹出窗口、tab页等都通过js生成。
+
+</p>
+<p>因此，使用的时候我一般只用在_layout页面中载入所需的js文件及初始化的js代码，而真正的布局放在其他类似Home或者Index的页面中，通过RenderBody导入。
+
+</p>
+<p>所有的相关功能页面都以分部视图的方式进行嵌入，而无需用到其他的模板页。参考如下：
+
+</p>
+<pre><code><div class="line"><span class="doctype">&lt;!DOCTYPE html&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">html</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">meta</span> <span class="attribute">http-equiv</span>=<span class="value">"Content-Type"</span> <span class="attribute">content</span>=<span class="value">"text/html; charset=utf-8"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">title</span>&gt;</span>@ViewBag.Title<span class="tag">&lt;/<span class="title">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">href</span>=<span class="value">"@Url.Content("</span>~/<span class="attribute">Public</span>/<span class="attribute">jUI</span>/<span class="attribute">themes</span>/<span class="attribute">default</span>/<span class="attribute">style.css</span>")" <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">type</span>=<span class="value">"text/css"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">href</span>=<span class="value">"@Url.Content("</span>~/<span class="attribute">Public</span>/<span class="attribute">jUI</span>/<span class="attribute">themes</span>/<span class="attribute">css</span>/<span class="attribute">core.css</span>")" <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">type</span>=<span class="value">"text/css"</span> /&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">href</span>=<span class="value">"@Url.Content("</span>~/<span class="attribute">Content</span>/<span class="attribute">Site.css</span>")" <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">type</span>=<span class="value">"text/css"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">href</span>=<span class="value">"@Url.Content("</span>~/<span class="attribute">Content</span>/<span class="attribute">css</span>/<span class="attribute">base.css</span>")" <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">type</span>=<span class="value">"text/css"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">link</span> <span class="attribute">href</span>=<span class="value">"@Url.Content("</span>~/<span class="attribute">Public</span>/<span class="attribute">jqPlot</span>/<span class="attribute">jquery.jqplot.css</span>")" <span class="attribute">rel</span>=<span class="value">"stylesheet"</span> <span class="attribute">type</span>=<span class="value">"text/css"</span> /&gt;</span> </div><br><div class="line">    @RenderSection("CustomCss", required: false)</div><div class="line">    <span class="comment">&lt;!--[if IE]&gt; </div><div class="line">    &lt;link href="@Url.Content("~/Public/jUI/themes/css/ieHack.css")" rel="stylesheet" type="text/css" /&gt; </div><div class="line">    &lt;![endif]--&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">style</span> <span class="attribute">type</span>=<span class="value">"text/css"</span>&gt;</span><span class="css"></div><div class="line">        <span class="id">#header</span></div><div class="line">        <span class="rules">{</div><div class="line">            <span class="rule"><span class="attribute">height</span>:<span class="value"> <span class="number">85</span>px;</span></span></div><div class="line">        <span class="rule">}</span></span></div><div class="line">        <span class="id">#leftside</span>, <span class="id">#container</span>, <span class="id">#splitBar</span>, <span class="id">#splitBarProxy</span></div><div class="line">        <span class="rules">{</div><div class="line">            <span class="rule"><span class="attribute">top</span>:<span class="value"> <span class="number">90</span>px;</span></span></div><div class="line">        <span class="rule">}</span></span></div><div class="line">    </span><span class="tag">&lt;/<span class="title">style</span>&gt;</span></div><br><div class="line">    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"@Url.Content("</span>~/<span class="attribute">Public</span>/<span class="attribute">jUI</span>/<span class="attribute">js</span>/<span class="attribute">speedup.js</span>")" <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"@Url.Content("</span>~/<span class="attribute">Scripts</span>/<span class="attribute">jquery-1.5.1.min.js</span>")" <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"@Url.Content("</span>~/<span class="attribute">Scripts</span>/<span class="attribute">jquery.validate.min.js</span>")" <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"@Url.Content("</span>~/<span class="attribute">Scripts</span>/<span class="attribute">jquery.validate.unobtrusive.min.js</span>")" <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"@Url.Content("</span>~/<span class="attribute">Scripts</span>/<span class="attribute">jquery.unobtrusive-ajax.min.js</span>")" <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line">    <span class="comment">&lt;!--[if lt IE 9]&gt;&lt;script language="javascript" type="text/javascript" src="@Url.Content("~/Public/jqPlot/excanvas.min.js")"&gt;&lt;/script&gt;&lt;![endif]--&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">src</span>=<span class="value">"@Url.Content("</span>~/<span class="attribute">Public</span>/<span class="attribute">jqPlot</span>/<span class="attribute">jquery.jqplot.min.js</span>")" <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line">    @Html.Partial("_JUIFile")</div><div class="line">    <span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></div><div class="line">        $(<span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span></div><div class="line">            DWZ.init(<span class="string">'@Url.Content("~/Public/jUI/dwz.frag.xml")'</span>, {</div><div class="line">                loginUrl: <span class="string">"login_dialog.html"</span>, loginTitle: <span class="string">"登录"</span>, </div><div class="line">                statusCode: { ok: <span class="number">200</span>, error: <span class="number">300</span>, timeout: <span class="number">301</span> }, </div><div class="line">                pageInfo: { pageNum: <span class="string">"pageNum"</span>, numPerPage: <span class="string">"numPerPage"</span>, orderField: <span class="string">"orderField"</span>, orderDirection: <span class="string">"orderDirection"</span> }, </div><div class="line">                debug: <span class="literal">false</span>, </div><div class="line">                callback: <span class="function"><span class="keyword">function</span> <span class="params">()</span> {</span></div><div class="line">                    initEnv();</div><div class="line">                    $(<span class="string">"#themeList"</span>).theme({ themeBase: <span class="string">"../Public/jUI/themes"</span> }); </div><div class="line">                }</div><div class="line">            });</div><div class="line">        });</div><br><div class="line">    </span><span class="tag">&lt;/<span class="title">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="title">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">body</span> <span class="attribute">id</span>=<span class="value">"bodyContent"</span> <span class="attribute">scroll</span>=<span class="value">"no"</span>&gt;</span></div><div class="line">    @RenderBody()</div><div class="line"><span class="tag">&lt;/<span class="title">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="title">html</span>&gt;</span></div></code></pre>
+<p>由于界面部件都是通过js生成的，因此在使用的时候需要注意<em>通过ajax读取的内容可能需要重复执行一些初始化的js代码，用来为新生成的内容增加js处理事件</em>;比较典型的就是通过弹出窗口读取模型新增视图的时候，无法执行客户端校验的问题，可以通过如下的方式解决：
+
+</p>
+<pre><code><div class="line"><span class="xml"><span class="tag">&lt;<span class="title">script</span> <span class="attribute">type</span>=<span class="value">"text/javascript"</span>&gt;</span><span class="javascript"></div><div class="line">    </span></span><span class="variable">$.validator.unobtrusive.parse</span><span class="xml">(document);</div><div class="line"><span class="tag">&lt;/<span class="title">script</span>&gt;</span></span></div></code></pre>
+<p>在指定rel，使用ajax进行更新的时候，不同的视图，相关的rel名称需要不一样，例如：
+
+</p>
+<pre><code><div class="line"><span class="tag">&lt;<span class="title">li</span>&gt;</span> </div><div class="line">    @Html.ActionLink(system.Name,"MenuInfo","ZC_Menu",new { system_id = system.ID},new { target = "ajax", rel = "menuInfoBox" })</div><div class="line"><span class="tag">&lt;/<span class="title">li</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">li</span>&gt;</span> </div><div class="line">    @Html.ActionLink(department.Name,"UserInfo","ZC_User",new { department_id = department.ID},new { target = "ajax", rel = "userInfoBox" })</div><div class="line"><span class="tag">&lt;/<span class="title">li</span>&gt;</span></div></code></pre>
+<p>设置ajaxToDo参数的超链接，和ajax表单一样，通过返回的json串进行回调。如果需要刷新当前navTab，navTabId参数需要返回false,同时默认的navTabAjaxDone方法是没有重载当前tab页的，需要修改dwz.ajax.js
+
+</p>
+<pre><code><div class="line">function navTabAjaxDone(json) {</div><div class="line">    DWZ<span class="variable">.ajaxDone</span>(json);</div><div class="line">    <span class="keyword">if</span> (json<span class="variable">.statusCode</span> == DWZ<span class="variable">.statusCode</span><span class="variable">.ok</span>) { </div><div class="line">    <span class="keyword">if</span> (json<span class="variable">.navTabId</span>) { <span class="comment">//把指定navTab页面标记为需要“重新载入”。注意navTabId不能是当前navTab页面的 </span></div><div class="line">        navTab<span class="variable">.reloadFlag</span>(json<span class="variable">.navTabId</span>);</div><div class="line">    } <span class="keyword">else</span> { <span class="comment">//重新载入当前navTab页面</span></div><div class="line">        navTab<span class="variable">.reload</span>(); <span class="preprocessor">#=&gt;加上这句就好了</span></div><div class="line">        navTabPageBreak({}, json<span class="variable">.rel</span>);</div><div class="line">    }</div><br><div class="line">    <span class="keyword">if</span> (<span class="string">"closeCurrent"</span> == json<span class="variable">.callbackType</span>) {</div><div class="line">        setTimeout(function () { navTab<span class="variable">.closeCurrentTab</span>(); }, <span class="number">100</span>);</div><div class="line">    } <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"forward"</span> == json<span class="variable">.callbackType</span>) {</div><div class="line">        navTab<span class="variable">.reload</span>(json<span class="variable">.forwardUrl</span>);</div><div class="line">    }</div><div class="line">}</div></code></pre>
+<h2>关于模型关系</h2>
+<p>一对多(一个部门对应多个用户，不会做并联删除操作)
+
+</p>
+<pre><code><div class="line"><span class="keyword">this</span><span class="variable">.HasRequired</span>(t =&gt; t<span class="variable">.Department</span>)</div><div class="line">  <span class="variable">.WithMany</span>(d =&gt; d<span class="variable">.Users</span>)</div><div class="line">  <span class="variable">.HasForeignKey</span>(t =&gt; t<span class="variable">.DepartmentID</span>)</div><div class="line">  <span class="variable">.WillCascadeOnDelete</span>(<span class="literal">false</span>);</div></code></pre>
+<p>多对多(一个用户对应多个收藏，一个搜藏对应多个用户)
+
+</p>
+<pre><code><div class="line">this<span class="preprocessor">.HasMany</span>(t =&gt; t<span class="preprocessor">.Members</span>)</div><div class="line">    <span class="preprocessor">.WithMany</span>(t =&gt; t<span class="preprocessor">.Favorites</span>)</div><div class="line">    <span class="preprocessor">.Map</span>(m =&gt;</div><div class="line">    {</div><div class="line">        m<span class="preprocessor">.ToTable</span>(<span class="string">"T_HY_MemberT_HY_Favorite"</span>)<span class="comment">;</span></div><div class="line">        m<span class="preprocessor">.MapLeftKey</span>(<span class="string">"T_HY_Favorite_ID"</span>)<span class="comment">;</span></div><div class="line">        m<span class="preprocessor">.MapRightKey</span>(<span class="string">"T_HY_Member_ID"</span>)<span class="comment">;</span></div><div class="line">    })<span class="comment">;</span></div></code></pre>
+<p>多对多的这种实体关系只在已经生成的实体上才能应用，也就是说必须是数据库中取出的已有数据所生成的实体，如下的情况是会报错的
+
+</p>
+<pre><code><div class="line"><span class="reserved">var</span> member = <span class="keyword">new</span> Member();</div><div class="line"><span class="reserved">var</span> favored_item = <span class="keyword">new</span> Favorite();</div><div class="line">favored_item.Members.Add(member); 此时的favored_item.Members为<span class="literal">null</span></div><div class="line"><span class="regexp">//</span>正确的方式应该是：</div><div class="line">member.Favorites.Add(favored_item); <span class="regexp">//</span>此时member.Favorites为<span class="literal">null</span></div><br><div class="line"><span class="regexp">//</span>多对多删除的时候，对应的级联删除需要手动处理，这是为了避免产生循环删除的问题</div></code></pre>
+<p>一对一或零(一个收藏对应一个或零个项目)
+
+</p>
+<pre><code><div class="line"><span class="keyword">this</span><span class="variable">.HasOptional</span>(t =&gt; t<span class="variable">.Financial</span>)</div><div class="line">  <span class="variable">.WithMany</span>(s =&gt; s<span class="variable">.Favoites</span>)</div><div class="line">  <span class="variable">.HasForeignKey</span>(t =&gt; t<span class="variable">.FinancialID</span>);</div></code></pre>
+<p><a href="http://www.cnblogs.com/dudu/tag/Entity%20Framework%20%E5%AE%9E%E8%B7%B5%E7%B3%BB%E5%88%97/">其他实体关系参考</a>
+
+</p>
+<h2>关于视图模型和验证</h2>
+<p>视图模型一般用在以下两种情况：
+
+</p>
+<ul>
+<li>需要在一个视图中展示多个模型的情况</li>
+<li>处于业务的原因，视图展现的内容和模型不一致，多见于注册的验证</li>
+</ul>
+<p>对于需要返回多个模型到同一个视图的情况，可以采用如下的方式：
+
+</p>
+<pre><code><div class="line"><span class="comment">//建立新的视图模型</span></div><div class="line"><span class="keyword">using</span> System;</div><div class="line"><span class="keyword">using</span> System.Collections.Generic;</div><div class="line"><span class="keyword">using</span> GGZBTQPT_PRO.Models;</div><br><div class="line"><span class="keyword">namespace</span> GGZBTQPT_PRO.ViewModels</div><div class="line">{</div><div class="line">    <span class="keyword">public</span> <span class="keyword">class</span> T_ZC_SelectUser</div><div class="line">    {</div><div class="line">      <span class="keyword">public</span> ICollection&lt;T_ZC_User&gt; Users { <span class="keyword">get</span>; <span class="keyword">set</span>; }</div><div class="line">      <span class="keyword">public</span> ICollection&lt;T_ZC_Department&gt; Departments { <span class="keyword">get</span>; <span class="keyword">set</span>; }</div><div class="line">      <span class="keyword">public</span> ICollection&lt;T_ZC_Role&gt; Roles { <span class="keyword">get</span>; <span class="keyword">set</span>; }</div><div class="line">      <span class="keyword">public</span> ICollection&lt;T_ZC_System&gt; Systems { <span class="keyword">get</span>; <span class="keyword">set</span>; }</div><div class="line">    }</div><div class="line">} </div><br><div class="line"><span class="comment">//视图中的使用  </span></div><div class="line">@model GGZBTQPT_PRO.ViewModels.T_ZC_SelectUser  </div><br><div class="line">@<span class="keyword">foreach</span> (<span class="keyword">var</span> user <span class="keyword">in</span> Model.Users)  </div><div class="line">{  </div><div class="line">    &lt;span&gt;@user.Title&lt;/span&gt;  </div><div class="line">}  </div><br><div class="line">@<span class="keyword">foreach</span> (<span class="keyword">var</span> role <span class="keyword">in</span> Model.Roles)  </div><div class="line">{  </div><div class="line">    &lt;span&gt;@role.Title&lt;/span&gt;</div><div class="line">}  </div><br><div class="line"><span class="comment">//控制器中的使用 </span></div><div class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;summary&gt;</span></span></div><div class="line"><span class="comment"><span class="xmlDocTag">///</span> 返回当前角色下的所有用户</span></div><div class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;/summary&gt;</span></span></div><div class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;param name="id"&gt;</span><span class="xmlDocTag">&lt;/param&gt;</span></span></div><div class="line"><span class="comment"><span class="xmlDocTag">///</span> <span class="xmlDocTag">&lt;returns&gt;</span><span class="xmlDocTag">&lt;/returns&gt;</span></span></div><div class="line"><span class="keyword">public</span> PartialViewResult SelectUser(<span class="keyword">int</span> id)</div><div class="line">{</div><div class="line">  Array selected_users = db.T_ZC_Role.Where( r =&gt; r.ID == id).First().Users.ToArray();</div><div class="line">  ViewBag.selected_users = selected_users;</div><br><div class="line">  <span class="keyword">var</span> select_user = <span class="keyword">new</span> T_ZC_SelectUser();</div><div class="line">  select_user.Users = db.T_ZC_User.ToList();</div><div class="line">  select_user.Departments = db.T_ZC_Department.ToList();</div><br><div class="line">  <span class="keyword">return</span> PartialView(select_user);</div><div class="line">}</div></code></pre>
+<p>对于单独的验证模型，可以采用如下的方式：
+<a href="http://diaosbook.com/Post/2012/8/3/model-validation-in-aspnet-mvc3">Model的验证方法参考</a>
+
+</p>
+<pre><code><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> VM_SignUp</div><div class="line">{ </div><br><div class="line">    [Required(ErrorMessage = <span class="string">"必须填写登录名"</span>)]</div><div class="line">    [Display(Name = <span class="string">"登录名"</span>)]</div><div class="line">    [Remote(<span class="string">"CheckLoginName"</span>, <span class="string">"Member"</span>, ErrorMessage = <span class="string">"该登录名已经被注册了"</span>)]</div><div class="line">    <span class="keyword">public</span> <span class="keyword">string</span> LoginName { <span class="keyword">get</span>; <span class="keyword">set</span>; }</div><br><div class="line">    [Required(ErrorMessage = <span class="string">"必须填写昵称"</span>)]</div><div class="line">    [Display(Name = <span class="string">"昵称"</span>)]</div><div class="line">    <span class="keyword">public</span> <span class="keyword">string</span> MemberName { <span class="keyword">get</span>; <span class="keyword">set</span>; }</div><br><div class="line">    [Required(ErrorMessage = <span class="string">"必须填写手机号码"</span>)]</div><div class="line">    [Display(Name = <span class="string">"手机号码"</span>)]</div><div class="line">    [RegularExpression(<span class="string">"^[0-9]*$"</span>, ErrorMessage = <span class="string">"手机格式不正确"</span>)]</div><div class="line">    [DataType(DataType.PhoneNumber)]</div><div class="line">    [Remote(<span class="string">"CheckCellPhone"</span>, <span class="string">"Member"</span>, ErrorMessage = <span class="string">"该手机已经被使用了，请尝试更改!"</span>)]</div><div class="line">    <span class="keyword">public</span> <span class="keyword">string</span> CellPhone { <span class="keyword">get</span>; <span class="keyword">set</span>; }</div><br><div class="line">    [DataType(DataType.Password)]</div><div class="line">    [Required(ErrorMessage = <span class="string">"必须填写登陆密码"</span>)]</div><div class="line">    [Display(Name = <span class="string">"登录密码"</span>)]</div><div class="line">    [RegularExpression(<span class="string">@"^[a-zA-Z]\w{5,17}$"</span>, ErrorMessage = <span class="string">"密码格式不正确"</span>)]</div><div class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Password { <span class="keyword">get</span>; <span class="keyword">set</span>; }</div><br><div class="line">    [DataType(DataType.Password)]</div><div class="line">    [Display(Name = <span class="string">"确认密码"</span>)]</div><div class="line">    [Compare(<span class="string">"Password"</span>, ErrorMessage = <span class="string">"密码必须一致"</span>)]</div><div class="line">    [RegularExpression(<span class="string">@"^[a-zA-Z]\w{5,17}$"</span>, ErrorMessage = <span class="string">"密码格式不正确"</span>)]</div><div class="line">    <span class="keyword">public</span> <span class="keyword">string</span> ConfirmPassword { <span class="keyword">get</span>; <span class="keyword">set</span>; }</div><br><div class="line">    [Display(Name = <span class="string">"邮箱"</span>)]</div><div class="line">    [RegularExpression(<span class="string">@"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"</span>, ErrorMessage = <span class="string">"邮件格式不正确"</span>)]</div><div class="line">    [Required(ErrorMessage = <span class="string">"必须填写邮箱地址"</span>)]</div><div class="line">    [DataType(DataType.EmailAddress)]</div><div class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Email { <span class="keyword">get</span>; <span class="keyword">set</span>; }</div><br><div class="line">    [Required(ErrorMessage = <span class="string">"必须选择会员类型"</span>)]</div><div class="line">    [Display(Name = <span class="string">"注册会员类型"</span>)]</div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> Type { <span class="keyword">get</span>; <span class="keyword">set</span>; }</div><br><div class="line">    [Display(Name = <span class="string">@"我同意网站的&lt;a href='http://www.ovcstf.com/Default_782,1.html'&gt;用户协议&lt;/a&gt;和&lt;a href='http://www.ovcstf.com/Default_781,1.html'&gt;隐私条款&lt;/a&gt;"</span>)]</div><div class="line">    [MustBeTrue(ErrorMessage = <span class="string">"请同意网站的相关协议和条款"</span>)]</div><div class="line">    <span class="keyword">public</span> <span class="keyword">bool</span> provision { <span class="keyword">get</span>; <span class="keyword">set</span>; }</div><div class="line">}</div></code></pre>
+<p>在controller中通过验证视图模型对实体模型进行赋值，参考如下：
+
+</p>
+<pre><code><div class="line">public ActionResult SignUp(VM_SignUp vm_signup)</div><div class="line">{</div><div class="line">    var types = from MemberTypes type <span class="keyword">in</span> Enum<span class="preprocessor">.GetValues</span>(typeof(MemberTypes))</div><div class="line">                select new { ID = (int)type, Name = type<span class="preprocessor">.ToString</span>() }<span class="comment">;</span></div><div class="line">    ViewData[<span class="string">"Type"</span>] = new SelectList(types, <span class="string">"ID"</span>, <span class="string">"Name"</span>)<span class="comment">;</span></div><br><div class="line">    if (ModelState<span class="preprocessor">.IsValid</span>)</div><div class="line">    {</div><div class="line">        var member = new T_HY_Member()<span class="comment">;</span></div><div class="line">        member<span class="preprocessor">.LoginName</span> = vm_signup<span class="preprocessor">.LoginName</span><span class="comment">;</span></div><div class="line">        member<span class="preprocessor">.MemberName</span> = vm_signup<span class="preprocessor">.MemberName</span><span class="comment">;</span></div><div class="line">        member<span class="preprocessor">.CellPhone</span> = vm_signup<span class="preprocessor">.CellPhone</span><span class="comment">;</span></div><div class="line">        member<span class="preprocessor">.CreatedAt</span> = DateTime<span class="preprocessor">.Now</span><span class="comment">;</span></div><div class="line">        member<span class="preprocessor">.UpdatedAt</span> = DateTime<span class="preprocessor">.Now</span><span class="comment">;</span></div><div class="line">        member<span class="preprocessor">.Password</span> = vm_signup<span class="preprocessor">.Password</span><span class="comment">;</span></div><div class="line">        member<span class="preprocessor">.Type</span> = vm_signup<span class="preprocessor">.Type</span><span class="comment">; </span></div><br><div class="line">        db<span class="preprocessor">.T</span>_HY_Member<span class="preprocessor">.Add</span>(member)<span class="comment">;</span></div><div class="line">        db<span class="preprocessor">.SaveChanges</span>()<span class="comment">;</span></div><br><div class="line">        Logging(<span class="string">"注册了会员,登录名："</span> + member<span class="preprocessor">.LoginName</span>, (int)OperateTypes<span class="preprocessor">.Create</span>, (int)GenerateSystem<span class="preprocessor">.Authority</span>)<span class="comment">;</span></div><div class="line">    }</div><br><div class="line">    return View(vm_signup)<span class="comment">;</span></div><div class="line">}</div></code></pre>
+<h2>关于Razor模板的使用</h2>
+<p><a href="http://blog.joycode.com/scottgu/archives/2011/01/24/116371.joy">参考链接</a>
+
+</p>
+<p><a href="http://www.cnblogs.com/nizhuguo/archive/2011/04/12/2013605.html">参考链接</a>
+
+</p>
+<p>关于ICollection&lt;&gt;, IEnumerator&lt;&gt;, IList&lt;&gt;，参考<a href="http://www.cnblogs.com/lenxu/archive/2012/01/09/2316935.html">IEnumerator.IEnumerable.ICollection.IList</a>
+
+</p>
+<p>当需要在视图中自定义一些展示逻辑的时候，可以通过<code>@helper</code>进行封装，eg:
+
+</p>
+<pre><code><div class="line">@helper GenerateUser(string selected_users, GGZBTQPT_PRO.Models.T_ZC_User user)</div><div class="line">{</div><div class="line">    <span class="keyword">if</span>(selected_users.IndexOf(user.ID.ToString()) &gt; <span class="number">0</span>)</div><div class="line">    { </div><div class="line">        <span class="xml"><span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">a</span> <span class="attribute">tname</span>=<span class="value">"@user.Name"</span> <span class="attribute">tvalue</span>=<span class="value">"@user.ID"</span> <span class="attribute">checked</span>=<span class="value">true</span> &gt;</span>@user.Name<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>  </div><div class="line">    }</div><div class="line">    else</div><div class="line">    { </div><div class="line">        <span class="tag">&lt;<span class="title">li</span>&gt;</span><span class="tag">&lt;<span class="title">a</span> <span class="attribute">tname</span>=<span class="value">"@user.Name"</span> <span class="attribute">tvalue</span>=<span class="value">"@user.ID"</span> &gt;</span>@user.Name<span class="tag">&lt;/<span class="title">a</span>&gt;</span><span class="tag">&lt;/<span class="title">li</span>&gt;</span>  </div><div class="line">    }</div><div class="line">}</span></div></code></pre>
+<p>当需要每个页面实现单独的逻辑的时候，可以通过section进行定义
+
+</p>
+<pre><code><div class="line"><span class="variable">@RenderSection</span>(<span class="string">"name"</span>,<span class="keyword">false</span>)</div><div class="line"><span class="variable">@section</span> name { <span class="regexp">//</span> 各自的独立逻辑 }</div></code></pre>
+<p>当存在一个模型对应多种视图的时候，可以采用<code>@Html.RenderPartial(&quot;partial_name&quot;, model)</code>的方式
+
+</p>
+<p>在超链接中使用action，可以采用@Url.Action
+
+</p>
+<pre><code><div class="line"><span class="tag">&lt;<span class="title">a</span> <span class="attribute">class</span>=<span class="value">"add"</span> <span class="attribute">href</span>=<span class="value">"@Url.Action("</span><span class="attribute">create</span>","<span class="attribute">ZC_Menu</span>", <span class="attribute">new</span> { <span class="attribute">system_id</span> = <span class="attribute">ViewBag.SystemID</span>})"   <span class="attribute">rel</span>=<span class="value">"create"</span> <span class="attribute">target</span>=<span class="value">"dialog"</span> <span class="attribute">title</span>=<span class="value">"添加新的功能菜单"</span> <span class="attribute">mask</span>=<span class="value">"true"</span> <span class="attribute">width</span>=<span class="value">"420"</span> <span class="attribute">height</span>=<span class="value">"340"</span>&gt;</span><span class="tag">&lt;<span class="title">span</span>&gt;</span>添加菜单<span class="tag">&lt;/<span class="title">span</span>&gt;</span><span class="tag">&lt;/<span class="title">a</span>&gt;</span></div></code></pre>
+<p>关于dropdownlist
+
+</p>
+<pre><code><div class="line">@Html<span class="variable">.DropDownList</span>(<span class="string">"ParentID"</span>, <span class="string">"请选择上级菜单"</span>)</div><div class="line">new SelectList(db<span class="variable">.T_ZC_Menu</span><span class="variable">.Where</span>(p =&gt; p<span class="variable">.IsValid</span> == <span class="literal">true</span> &amp;&amp; p<span class="variable">.SystemID</span> == system_id), <span class="string">"ID"</span>, <span class="string">"Name"</span>, t_zc_menu<span class="variable">.ParentID</span>);</div></code></pre>
+<h2>关于数据查询</h2>
+<p><a href="http://boytnt.blog.51cto.com/966121/977382">参考链接</a>
+
+</p>
+<p>左连接
+
+</p>
+<pre><code><div class="line"><span class="keyword">var</span> query = <span class="keyword">from</span> u <span class="keyword">in</span> usergroups</div><div class="line">        <span class="keyword">join</span> p <span class="keyword">in</span> UsergroupPrices on u equals p.UsergroupID <span class="keyword">into</span> gj</div><div class="line">        <span class="keyword">from</span> x <span class="keyword">in</span> gj.DefaultIfEmpty()</div><div class="line">        <span class="keyword">select</span> <span class="keyword">new</span> { </div><div class="line">            UsergroupID = u.UsergroupID,</div><div class="line">            UsergroupName = u.UsergroupName,</div><div class="line">            Price = (x == <span class="keyword">null</span> ? String.Empty : x.Price) </div><div class="line">        };</div></code></pre>
+<p>分组查询，以及如何对TimeSpan类型进行统计
+
+</p>
+<pre><code><div class="line">var member_logs = db<span class="preprocessor">.T</span>_ZC_MemberLog<span class="preprocessor">.Include</span>(<span class="string">"Member"</span>)</div><div class="line">                    <span class="preprocessor">.ToList</span>()</div><div class="line">                    <span class="preprocessor">.GroupBy</span>(m =&gt; m<span class="preprocessor">.Member</span>)</div><div class="line">                    <span class="preprocessor">.Select</span>(m =&gt; new VM_OnlineContinuance { MemberName = m<span class="preprocessor">.Key</span><span class="preprocessor">.MemberName</span>, </div><div class="line">                                                            Continuance = m<span class="preprocessor">.Aggregate</span>(new TimeSpan(), (sum, nextData) =&gt; sum<span class="preprocessor">.Add</span>(nextData<span class="preprocessor">.Continuance</span>)) })<span class="comment">;</span></div></code></pre>
+<h2>关于Log4net的使用</h2>
+<p><a href="http://blog.csdn.net/zhoufoxcn/article/details/2220533">参考链接</a>
+
+</p>
+<p>如果需要在数据库中记录额外的信息，可以通过如下方式进行扩展
+
+</p>
+<pre><code><div class="line"><span class="comment">//controller</span></div><div class="line">log4net.LogicalThreadContext.Properties[<span class="string">"operate_type"</span>] = operate_type;</div><div class="line">log4net.LogicalThreadContext.Properties[<span class="string">"generate_type"</span>] = generate_type;</div><div class="line">log4net.LogicalThreadContext.Properties[<span class="string">"generate_system"</span>] = generate_system;</div><br><div class="line"><span class="comment">//web.config 中的appender下添加</span></div><div class="line">&lt;parameter&gt;</div><div class="line">    <span class="xml"><span class="tag">&lt;<span class="title">parameterName</span> <span class="attribute">value</span>=<span class="value">"@operate_type"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">dbType</span> <span class="attribute">value</span>=<span class="value">"Int32"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">layout</span> <span class="attribute">type</span>=<span class="value">"log4net.Layout.RawPropertyLayout"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="title">key</span> <span class="attribute">value</span>=<span class="value">"operate_type"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="title">layout</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="title">parameter</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">parameter</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">parameterName</span> <span class="attribute">value</span>=<span class="value">"@generate_type"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">dbType</span> <span class="attribute">value</span>=<span class="value">"Int32"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">layout</span> <span class="attribute">type</span>=<span class="value">"log4net.Layout.RawPropertyLayout"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="title">key</span> <span class="attribute">value</span>=<span class="value">"generate_type"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="title">layout</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="title">parameter</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="title">parameter</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">parameterName</span> <span class="attribute">value</span>=<span class="value">"@generate_system"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">dbType</span> <span class="attribute">value</span>=<span class="value">"Int32"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="title">layout</span> <span class="attribute">type</span>=<span class="value">"log4net.Layout.RawPropertyLayout"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="title">key</span> <span class="attribute">value</span>=<span class="value">"generate_system"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="title">layout</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="title">parameter</span>&gt;</span></div><br><div class="line">//修改对应的commandText节</div><div class="line"><span class="tag">&lt;<span class="title">commandText</span> <span class="attribute">value</span>=<span class="value">"INSERT INTO T_ZC_CommonLog ([Date],[Thread],[Level],[Logger],[Message],[Source],[Exception],[User],[OperateType],[GenerateType],[GenerateSystem]) VALUES (@log_date, @thread, @log_level, @logger, @message, @source, @exception, @user, @operate_type, @generate_type, @generate_system)"</span> /&gt;</span></span></div></code></pre>
+<h2>关于路由</h2>
+<p>在使用ActionLink等help方法的时候，对于传递的routeValues，需要保证key的名称和action中的方法参数名称一致，eg:
+
+</p>
+<pre><code><div class="line">&lt;li&gt; @Html<span class="preprocessor">.ActionLink</span>(department<span class="preprocessor">.Name</span>,<span class="string">"UserInfo"</span>,<span class="string">"ZC_User"</span>,new { department_id = department<span class="preprocessor">.ID</span>},new { target = <span class="string">"ajax"</span>, rel = <span class="string">"userInfoBox"</span> })&lt;/li&gt;</div><br><div class="line">//对应的action方法，也需要使用department_id</div><div class="line">public PartialViewResult UserInfo(int department_id)</div><div class="line">{</div><div class="line">var users = db<span class="preprocessor">.T</span>_ZC_User<span class="preprocessor">.Include</span>(<span class="string">"Department"</span>)<span class="preprocessor">.Where</span>(m =&gt; m<span class="preprocessor">.DepartmentID</span> == department_id)<span class="comment">;</span></div><div class="line">return PartialView(users)<span class="comment">;</span></div><div class="line">}</div></code></pre>
+<p>添加区域后，如何保证路由的正确，需要添加对应的命名空间
+
+</p>
+<pre><code><div class="line"><span class="comment">//修改Global.asax.cs</span></div><br><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> RegisterRoutes(RouteCollection routes)</div><div class="line">{</div><div class="line">    routes<span class="variable">.IgnoreRoute</span>(<span class="string">"{resource}.axd/{*pathInfo}"</span>);</div><br><div class="line">    routes<span class="variable">.MapRoute</span>(</div><div class="line">    <span class="string">"Default"</span>, <span class="comment">// Route name</span></div><div class="line">    <span class="string">"{controller}/{action}/{id}"</span>, <span class="comment">// URL with parameters</span></div><div class="line">    new { controller = <span class="string">"Home"</span>, action = <span class="string">"Index"</span>, <span class="keyword">id</span> = UrlParameter<span class="variable">.Optional</span> },<span class="comment">// Parameter defaults</span></div><div class="line">    new[] { <span class="string">"Web.Controllers"</span> }<span class="comment">// 引入默认的命名空间,Web代表项目的名称，请按需修改</span></div><div class="line">    );</div><br><div class="line">}</div></code></pre>
+<p>从外部路由到area的写法：
+
+</p>
+<pre><code><div class="line"><span class="annotation">@Html</span>.ActionLink(<span class="string">"xxx"</span>, <span class="string">"action"</span>, <span class="string">"controller"</span>, <span class="keyword">new</span> { area = <span class="string">"area_name"</span>}, <span class="keyword">null</span>)    </div></code></pre>
+<h2>关于如何使用枚举类型</h2>
+<p><a href="http://social.msdn.microsoft.com/Forums/en-US/adodotnetentityframework/thread/55dc58a4-6190-4bad-b317-1787cf86bf3d">参考链接</a>
+
+</p>
+<p>在下拉菜单中使用枚举类型进行绑定
+<a href="http://stackoverflow.com/questions/388483/how-do-you-create-a-dropdownlist-from-an-enum-in-asp-net-mvc">参考链接</a>
+
+</p>
+<pre><code><div class="line">@<span class="type">Html</span>.<span class="type">DropDownListFor</span>(model =&gt; model.<span class="type">Type</span>, new <span class="type">SelectList</span>(<span class="type">Enum</span>.<span class="type">GetNames</span>(<span class="typedef">typeof<span class="container">(<span class="type">MemberTypes</span>)</span>)))</span></div><br><div class="line">//or <span class="keyword">in</span> controller, 这里的(int)<span class="typedef"><span class="keyword">type</span>实在是让我很困惑的一件事</span></div><div class="line"><span class="title">var</span> <span class="typedef">types = from <span class="type">MemberTypes</span> <span class="keyword">type</span> in <span class="type">Enum</span>.<span class="type">GetValues</span><span class="container">(<span class="title">typeof</span>(<span class="type">MemberTypes</span>)</span>)</span></div><div class="line">        select new { <span class="type">ID</span> = (int)<span class="typedef"><span class="keyword">type</span>, <span class="type">Name</span> = <span class="keyword">type</span>.<span class="type">ToString</span><span class="container">()</span> };</span></div><div class="line"><span class="type">ViewData</span>[<span class="string">"MemberTypes"</span>] = new <span class="type">SelectList</span>(<span class="typedef">types, "<span class="type">ID</span>", "<span class="type">Name</span>");</span></div><div class="line">//<span class="keyword">in</span> view</div><div class="line">@<span class="type">Html</span>.<span class="type">DropDownList</span>(<span class="string">"MemberTypes"</span>)</div></code></pre>
+<p>如果需要读取为enum设置的display属性或者其他自定义属性，用于视图的个性化展示，可以采用如下的方法：
+
+</p>
+<pre><code><div class="line"><span class="title">var</span> <span class="typedef">types = from <span class="type">GenerateSystem</span> systemType in <span class="type">Enum</span>.<span class="type">GetValues</span><span class="container">(<span class="title">typeof</span>(<span class="type">GenerateSystem</span>)</span>)</span></div><div class="line">            <span class="keyword">where</span> systemType != <span class="number">0</span></div><div class="line">            select new { <span class="type">ID</span> = (int)systemType, <span class="type">Name</span> = ((<span class="type">DisplayAttribute</span>[])<span class="typedef">typeof<span class="container">(<span class="type">GenerateSystem</span>)</span>.<span class="type">GetField</span><span class="container">(<span class="title">systemType</span>.<span class="type">ToString</span>()</span>).<span class="type">GetCustomAttributes</span><span class="container">(<span class="title">typeof</span>(<span class="type">DisplayAttribute</span>)</span>, false)).<span class="type">First</span><span class="container">()</span>.<span class="type">Name</span> };</span></div><br><div class="line"><span class="type">SelectList</span> list = new <span class="type">SelectList</span>(<span class="typedef">types, "<span class="type">ID</span>", "<span class="type">Name</span>");</span></div><div class="line"><span class="title">return</span> list;</div></code></pre>
+<h2>关于测试</h2>
+<p>入门链接
+<a href="http://dotnetslackers.com/articles/aspnet/Built-in-Unit-Test-for-ASP-NET-MVC-3-in-Visual-Studio-2010-Part-1.aspx">http://dotnetslackers.com/articles/aspnet/Built-in-Unit-Test-for-ASP-NET-MVC-3-in-Visual-Studio-2010-Part-1.aspx</a>
+
+</p>
+<p><a href="http://dotnetslackers.com/articles/aspnet/Built-in-Unit-Test-for-ASP-NET-MVC-3-in-Visual-Studio-2010-Part-2.aspx">http://dotnetslackers.com/articles/aspnet/Built-in-Unit-Test-for-ASP-NET-MVC-3-in-Visual-Studio-2010-Part-2.aspx</a>
+
+</p>
+<h2>关于Excel生成和读取</h2>
+<p>生成参考：<a href="http://code.google.com/p/excel-generator/wiki/MVC_ExcelResult">http://code.google.com/p/excel-generator/wiki/MVC_ExcelResult</a>
+
+</p>
+<p>读取参考：<a href="https://github.com/paulyoder/LinqToExcel#welcome-to-the-linqtoexcel-project">https://github.com/paulyoder/LinqToExcel#welcome-to-the-linqtoexcel-project</a>
+
+</p>
+<h2>其他</h2>
+<ul>
+<li>通过为字段设置<code>[Display(Name = &quot;登录名&quot;)]</code>,可以避免在视图中编写额外的labelText</li>
+<li>action中传递的参数名是不分大小写的</li>
+<li>action的方法标识默认是POST、GET都能访问的，如果该action只允许GET访问，请加上[HTTPGet]</li>
+<li>在js中使用调用模型数据<code>$.post(&quot;@Url.Action(&quot;SelectUser&quot;,&quot;ZC_Role&quot;, new { id = @ViewBag.RoleID})&quot;,{ select_users: result },function(data){ dialogAjaxDone(data);},&quot;json&quot;);</code></li>
+<li><a href="http://www.cnblogs.com/fly_dragon/archive/2011/06/15/2081063.html">如何使用过滤器实现切面编程</a></li>
+</ul>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+        <div class="alignright">
+          <a href="http://xiongbo.me/2013/01/24/2013-01-24-start-with-mvc3-and-dwz/#disqus_thread" class="comment-link">Comments</a>
+        </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
 
 
   
@@ -658,68 +896,6 @@
 
 
   
-    <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2012-04-28T00:00:00.000Z"><a href="/2012/04/28/2012-04-28-rails-recipes---create-declarative-named-queries/">Apr 28, 2012</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2012/04/28/2012-04-28-rails-recipes---create-declarative-named-queries/">Rails Recipes --创建自我表达的命名查询</a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h3>问题</h3>
-<p>对于需要筛选数据的情况，经常会出现在控制器中定义查询方法的方式，代码如下：
-
-</p>
-<pre><code><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">WombatsController</span> <span class="inheritance">&lt; <span class="parent">ApplicationController</span></span></span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">search</span></span></div><div class="line">        <span class="variable">@wombats</span> = <span class="constant">Wombat</span>.where( <span class="string">"bio like ?"</span>, <span class="string">"%<span class="subst">#{params[<span class="symbol">:q</span>]}</span> %"</span>).</div><div class="line">            order(<span class="symbol">:age</span>)</div><div class="line">        render <span class="symbol">:index</span></div><div class="line">    <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></code></pre>
-<p>但是这种方式是不好的，因为它将业务逻辑放在了控制器中，增加了耦合度，而我们往往应该在模型中对业务进行封装，那么有什么好的方法呢？
-
-</p>
-<h3>解决方法</h3>
-<p>先看一般的解决方式：
-
-</p>
-<pre><code><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Wombat</span> <span class="inheritance">&lt; <span class="parent">ActiveRecord::Base</span></span></span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title"><span class="keyword">self</span></span>.<span class="title">with_bio_containing</span><span class="params">(query)</span></span></div><div class="line">        where( <span class="string">"bio like ?"</span>, <span class="string">"%<span class="subst">#{query}</span> %"</span>).</div><div class="line">        order(<span class="symbol">:age</span>)</div><div class="line">    <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></code></pre>
-<p>通过将对数据的访问逻辑放在模型中，那么我们可以采用<code>@wombats=Wombat.with_bio_containing(params[:q])</code>这种调用类方法方式返回需要的数据，而不用了解具体的实现机制。
-
-</p>
-<p>接下来，我们可以采用&#39;scope&#39;方法进行更好的封装，先看个简单的例子：
-
-</p>
-<pre><code><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> &lt; <span class="title">ActiveRecord</span>::<span class="title">Base</span></div><div class="line">    <span class="title">scope</span> :<span class="title">teenagers</span>, <span class="title">where</span>( "<span class="title">age</span> &lt; 20 <span class="title">AND</span> <span class="title">age</span> &gt; 12" )</div><div class="line">    <span class="title">scope</span> :<span class="title">by_name</span>, <span class="title">order</span>(:<span class="title">name</span>)</div><div class="line"><span class="title">end</span></div></code></pre>
-<p>这里我们通过<em>scope</em>对查询和排序条件进行了命名，于是可以采用<code>Person.teenagers.count</code>的方式返回查询条件内的数量，更进一步，可以采用<code>Person.teenagers.by_name.map &amp;:name</code>这种链式调用的方式返回按名字排序的人员数组。
-
-</p>
-<p>最后，回看第一个列子，如何在这种方式中使用动态查询呢？代码如下：
-
-</p>
-<pre><code><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Wombat</span> &lt; <span class="title">ActiveRecord</span>:</span>:Base</div><div class="line">    scope :with_bio_containing, <span class="keyword">lambda</span> {|query| where( <span class="string">"bio like ?"</span>, <span class="string">"% #{query} %"</span>).order(:age) }</div><div class="line">end</div></code></pre>
-<p>我们在scope中引入了lambda对象，这样，我们就能通过代码块的方式动态的获取查询条件了。值得一提的是：<code>Person.teenagers</code>返回的并不是一组序列，而是返回的<em>ActiveRecord::Relation</em>的实例，这可以通过<code>Person.teenagers.to_sql</code>返回的是一段sql查询代码看出来，具体的查询代码如下：
-
-</p>
-<pre><code><div class="line"><span class="operator"><span class="keyword">select</span> <span class="string">"people"</span>.* <span class="keyword">from</span> <span class="string">"people"</span> <span class="keyword">where</span> (age&lt;<span class="number">20</span> <span class="keyword">and</span> age&gt;<span class="number">12</span>)</div></code></pre>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-  
 
   <nav id="pagination">
   
@@ -751,6 +927,12 @@
     <li><a href="/tags/blog/">blog</a><small>1</small></li>
   
     <li><a href="/tags/design/">design</a><small>1</small></li>
+  
+    <li><a href="/tags/dwz/">dwz</a><small>1</small></li>
+  
+    <li><a href="/tags/j-ui/">j-ui</a><small>1</small></li>
+  
+    <li><a href="/tags/mvc3/">mvc3</a><small>1</small></li>
   
     <li><a href="/tags/project/">project</a><small>1</small></li>
   
