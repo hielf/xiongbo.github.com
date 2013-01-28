@@ -49,6 +49,64 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2012-05-02T00:00:00.000Z"><a href="/2012/05/02/2012-05-02-Make-Dumb-Data-Smart-with-composed-of/">May 2, 2012</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2012/05/02/2012-05-02-Make-Dumb-Data-Smart-with-composed-of/">Rails Recipes --通过composed_of构建结构化数据</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h3>问题</h3>
+<p>如何对数据进行结构化封装，从而可以使用面向对象的方式进行访问呢？采用compose_of()方法可以解决这个问题！
+
+</p>
+<h3>解决方法</h3>
+<p>假设现在有一个课程分数模型CourseRecord，其中有一个表示该课程分数的字段：letter_grade，该模型的表示如下：
+
+</p>
+<pre><code><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">CourseRecord</span> &lt; <span class="title">ActiveRecord</span>::<span class="title">Base</span></div><div class="line">    <span class="title">composed_of</span> :<span class="title">grade</span>,</div><div class="line">            <span class="title">class_name</span>: '<span class="title">Grade</span>', </div><div class="line">            <span class="title">mapping</span>: %<span class="title">w</span>(<span class="title">letter_grade</span> <span class="title">letter_grade</span>)</div><div class="line"><span class="title">end</span></div></code></pre>
+<p>这里的grade表示封装的属性名称，并通过mapping属性将letter_grade字段与稍后提到的Grade模型中的letter_grade字段进行映射。这里的class_name属性是可选的，它表示对应的封装模型名称，如果不指定，则默认为属性封装名称，即grade。下面是Grade的模型表示：
+
+</p>
+<pre><code><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Grade</span></span></div><div class="line">    <span class="keyword">include</span> <span class="constant">Comparable</span></div><div class="line">    attr_accessor <span class="symbol">:letter_grade</span></div><div class="line">    <span class="constant">SORT_ORDER</span> = [<span class="string">"f"</span> , <span class="string">"d"</span> , <span class="string">"c"</span> , <span class="string">"b"</span> , <span class="string">"a"</span> ].inject({}) {|h, letter| </div><div class="line">    h.update <span class="string">"<span class="subst">#{letter}</span>-"</span> =&gt; h.size</div><div class="line">    h.update letter =&gt; h.size</div><div class="line">    h.update <span class="string">"<span class="subst">#{letter}</span>+"</span> =&gt; h.size</div><div class="line">    }</div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">initialize</span><span class="params">(letter_grade)</span></span></div><div class="line">        <span class="variable">@letter_grade</span> = letter_grade</div><div class="line">    <span class="keyword">end</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">&lt;=&gt;</span><span class="params">(other)</span></span></div><div class="line">        <span class="constant">SORT_ORDER</span>[letter_grade.downcase] &lt;=&gt;</div><div class="line">        <span class="constant">SORT_ORDER</span>[other.letter_grade.downcase]</div><div class="line">    <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></code></pre>
+<p>通过这种方式，我们就可以对属性进行个性化的封装。然后我们就能采用如下的方式进行比较：
+
+</p>
+<pre><code><div class="line">&gt;&gt; Grade.<span class="keyword">new</span>(<span class="string">"a-"</span>) &lt; Grade.<span class="keyword">new</span>(<span class="string">"a+"</span>) <span class="preprocessor"># =&gt; true</span></div></code></pre>
+<p>其中Comparable mixin用于类中的对象间的排序。并且，这个类必须定义&lt;=&gt;操作符，用于确定对象间如何进行比较，根据是否小于，等于 或大于这个其它对象来决定返回值-1、0、1。
+
+</p>
+<p>值得一提的是想要通过<code>course.grade.letter_grade = &quot;f&quot;; course.save</code>的方式对对象的值进行修改的话，是行不通的。而必须采用<code>course.grade = Grade.new(&quot;f&quot;); course.save</code>的方式才行。
+
+</p>
+<p>特别有用的是，不仅仅是单一的字段，还可以对多个字段进行封装，比如在逻辑上应该属于一类的字段<em>street, city, state, country</em>，可以通过如下的方式封装到address对象中。
+
+</p>
+<pre><code><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span> &lt; <span class="title">ActiveRecord</span>::<span class="title">Base</span></div><div class="line">    <span class="title">composed_of</span> :<span class="title">address</span>, :<span class="title">mapping</span> =&gt; [ %<span class="title">w</span>(<span class="title">address_street</span> <span class="title">street</span>),</div><div class="line">        %<span class="title">w</span>(<span class="title">address_city</span> <span class="title">city</span>),</div><div class="line">        %<span class="title">w</span>(<span class="title">address_state</span> <span class="title">state</span>) ,</div><div class="line">        %<span class="title">w</span>(<span class="title">address_country</span> <span class="title">country</span>) ]</div><div class="line"><span class="title">end</span></div></code></pre>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2012-04-28T00:00:00.000Z"><a href="/2012/04/28/2012-04-28-rails-recipes---create-declarative-named-queries/">Apr 28, 2012</a></time>
       
       
@@ -345,11 +403,15 @@
   
     <li><a href="/tags/dwz/">dwz</a><small>1</small></li>
   
+    <li><a href="/tags/guide/">guide</a><small>1</small></li>
+  
     <li><a href="/tags/j-ui/">j-ui</a><small>1</small></li>
   
     <li><a href="/tags/mvc3/">mvc3</a><small>1</small></li>
   
     <li><a href="/tags/project/">project</a><small>1</small></li>
+  
+    <li><a href="/tags/rails/">rails</a><small>1</small></li>
   
     <li><a href="/tags/reading-notes/">reading-notes</a><small>3</small></li>
   

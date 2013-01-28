@@ -286,6 +286,260 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2013-01-24T06:34:43.000Z"><a href="/2013/01/24/2013-01-27-Rails-3.2-Development-Standards-Guide/">Jan 24, 2013</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2013/01/24/2013-01-27-Rails-3.2-Development-Standards-Guide/">（翻译）Rails 3.2 开发标准指南</a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1>Rails 3.2 开发标准指南</h1>
+<h2>Approach</h2>
+<h2>使用途径</h2>
+<p>Apply the <a href="http://en.wikipedia.org/wiki/You_ain&#39;t_gonna_need_it">YAGNI</a> and 
+<a href="http://en.wikipedia.org/wiki/KISS_principle">KISS</a> principles to all of the following.
+
+</p>
+<p>在以下实践中贯彻 <a href="http://en.wikipedia.org/wiki/You_ain&#39;t_gonna_need_it">YAGNI</a> 和
+<a href="http://en.wikipedia.org/wiki/KISS_principle">KISS</a> 原则
+
+</p>
+<ul>
+<li>General architecture</li>
+<li>Product and API features</li>
+<li><p>Implementation specifics</p>
+</li>
+<li><p>一般架构</p>
+</li>
+<li>产品及API功能</li>
+<li>实现细节</li>
+</ul>
+<h2>Files</h2>
+<h2>文件</h2>
+<ul>
+<li>Spaces not tabs</li>
+<li>tab = 2 spaces</li>
+<li>Unix line endings</li>
+<li><p>UTF-8 encoding</p>
+</li>
+<li><p>采用空格作为缩进而不是制表符</p>
+</li>
+<li>采用2个空格作为一个缩进</li>
+<li>采用Unix行尾结束符</li>
+<li>采用UTF-8 编码格式</li>
+</ul>
+<h2>Documentation</h2>
+<h2>文档</h2>
+<p>All classes, modules, and methods must be documented using <a href="http://yardoc.org/">YARD</a> formatted comments.
+
+</p>
+<p>使用 <a href="http://yardoc.org/">YARD</a> 为所有的类、模块和方法格式化注释.
+
+</p>
+<h2>General Guidelines</h2>
+<h2>一般准则</h2>
+<p>These guidelines are based on Sandy Metz&#39;s programming &quot;rules&quot; which she introduced on 
+<a href="http://rubyrogues.com/087-rr-book-clubpractical-object-oriented-design-in-ruby-with-sandi-metz/">Ruby Rogues</a>.
+
+</p>
+<p>以下的准则均基于Sandy Metz在 <a href="http://rubyrogues.com/087-rr-book-clubpractical-object-oriented-design-in-ruby-with-sandi-metz/">Ruby Rogues</a> 上所介绍的编程“规则”.
+
+</p>
+<p>The rules are purposefully aggressive and are designed to give you pause so your app won&#39;t run amok.
+It&#39;s expected that you will break them for pragmatic reasons... <strong>alot</strong>.
+<em>See the note on <a href="#approach">YAGNI and KISS</a>.</em>
+
+</p>
+<p>这些规则是故意设计成具有强制性，就是为了通过适度的“中止”，以使你的应用不会失去控制。
+希望你是在基于<strong>很多</strong>务实的原因才会打破它。<em>参考<a href="#approach">YAGNI and KISS</a></em>
+
+</p>
+<ul>
+<li>Classes can be no longer than 100 lines of code. </li>
+<li>Methods can be no longer than 5 lines of code.</li>
+<li>Methods can take a maximum of 4 parameters.</li>
+<li>Controllers should only instantiate 1 object.</li>
+<li>Views should only have access to 1 instance variable.</li>
+<li><p>Never directly reference another class/module from within a class. 
+<em>Such references should be passed in</em>.</p>
+</li>
+<li><p>类中的代码不超过100行</p>
+</li>
+<li>方法中的代码不超过5行</li>
+<li>方法最多采用4个参数</li>
+<li>控制器应该只实例化一个对象</li>
+<li>视图应该只获取一个实例变量</li>
+<li>永远不要直接在类中直接引用其他的类或者模块 <em>而应该传递这些引用</em></li>
+</ul>
+<h2>Models</h2>
+<h2>模型</h2>
+<ul>
+<li>Never use dynamic finders. e.g. <code>find_by_...</code></li>
+<li><p>Be thoughtful about using callbacks. They can lead to unwanted coupling.</p>
+</li>
+<li><p>永远不要使用动态的查找方法。 例如：<code>find_by_...</code></p>
+</li>
+<li>仔细斟酌对回调的使用。他们会导致不必要的耦合。</li>
+</ul>
+<p><strong>All models should be organized using the following format.</strong>
+
+</p>
+<p><strong>所有的模型请采用以下的格式组织代码</strong>
+
+</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyModel</span> &<span class="title">lt</span>;</span> <span class="constant">ActiveRecord::Base</span></div><div class="line">  <span class="comment"># extends ...................................................................</span></div><div class="line">  <span class="comment"># includes ..................................................................</span></div><div class="line">  <span class="comment"># security (i.e. attr_accessible) ...........................................</span></div><div class="line">  <span class="comment"># relationships .............................................................</span></div><div class="line">  <span class="comment"># validations ...............................................................</span></div><div class="line">  <span class="comment"># callbacks .................................................................</span></div><div class="line">  <span class="comment"># scopes ....................................................................</span></div><div class="line">  <span class="comment"># additional config .........................................................</span></div><div class="line">  <span class="comment"># class methods .............................................................</span></div><div class="line">  <span class="comment"># public instance methods ...................................................</span></div><div class="line">  <span class="comment"># protected instance methods ................................................</span></div><div class="line">  <span class="comment"># private instance methods ..................................................</span></div><div class="line"><span class="keyword">end</span></div></code></pre></td></tr></table></figure>
+
+
+<p><em>NOTE: The comments listed above should exist in the file to serve as a visual reminder of the format.</em>
+
+</p>
+<p><em>注意：以上所列出的注释需明确的编写在文件中，用于在视觉上给出必要的格式提示。</em>
+
+</p>
+<h3>Model Implementation</h3>
+<h3>模型的实现</h3>
+<p>Its generally a good idea to isolate different concerns into separate modules.
+We recommend using Concerns as outlined in <a href="http://37signals.com/svn/posts/3372-put-chubby-models-on-a-diet-with-concerns">this blog post</a>.
+
+</p>
+<p>针对不同的关注点进行模块分离通常是一个好主意。我们推荐从<a href="http://37signals.com/svn/posts/3372-put-chubby-models-on-a-diet-with-concerns">这篇博客</a>中的介绍开始。
+
+</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="string">|-project</span></div><div class="line">  <span class="string">|-app</span></div><div class="line">    <span class="string">|-assets</span></div><div class="line">    <span class="string">|-controllers</span></div><div class="line">    <span class="string">|-helpers</span></div><div class="line">    <span class="string">|-mailers</span></div><div class="line">    <span class="string">|-models</span></div><div class="line">      <span class="string">|-concerns &lt;-----</span></div><div class="line">    <span class="string">|-views</span></div></code></pre></td></tr></table></figure>
+
+<h4>Guidelines</h4>
+<h4>指导方针</h4>
+<ul>
+<li>CRUD operations that are limited to a single model should be implemented in the model.
+For example, a <code>full_name</code> method that concats <code>first_name</code> and <code>last_name</code></li>
+<li>CRUD operations that reach beyond this model should be implemented as a Concern.
+For example, a <code>status</code> method that needs to look at several other models to calculate.</li>
+<li>Simple non-CRUD operations should be implemented as a Concern.</li>
+<li><strong>Important!</strong> Concerns should be isolated and self contained. 
+They should NOT make assumptions about how the receiver is composed at runtime.
+It&#39;s unacceptable for a concern to invoke methods defined in other concerns; however, 
+invoking methods defined in the intended receiver is permissible.</li>
+<li><p>Complex <strong>multi-step</strong> operations should be implemented as a process. <em>See below.</em></p>
+</li>
+<li><p>限于单个模型的CRUD操作应该在模型内实现。比如，采用<code>full_name</code>方法合并<code>first_name</code>和<code>last_name</code>。</p>
+</li>
+<li>超出当前模型的CRUD操作应该作为一个关注点。比如，<code>status</code>方法就需要依据许多其他的模型进行计算。</li>
+<li>简单的非CRUD操作应该作为一个关注点实现。</li>
+<li><strong>非常重要！</strong> 关注点应该独立而且自包含。他们<strong>不</strong>应该假设接收者在运行时是如何组成的。一个关注去调用其他关注中的方法是不被接受的。然而，调用定义在预定接收者中的方法是允许的。</li>
+<li>复杂的 <strong>多步</strong> 操作应该作为过程实现。<em>见下文</em></li>
+</ul>
+<h2>Processes</h2>
+<h2>过程</h2>
+<p>A process is defined as a <strong>multi-step</strong> operation which includes any of the following.
+
+</p>
+<p>过程是对“多步”操作的定义，它包含以下内容。
+
+</p>
+<ul>
+<li>A complex task oriented transaction is being performed.</li>
+<li>A call is made to an external service.</li>
+<li>Any OS level interaction is performed.</li>
+<li><p>Sending emails, exporting files, etc...</p>
+</li>
+<li><p>需要执行复杂的、任务导向的事务。</p>
+</li>
+<li>对外部服务的调用。</li>
+<li>执行任何操作系统级别的交互。</li>
+<li>发送邮件、导出文件，等等...。</li>
+</ul>
+<p>In an attempt to better manage processes, we loosely follow some domain driven development (DDD) principles.
+Namely, we have added a <code>processes</code> directory under <code>app</code> to hold our process implementations.
+
+</p>
+<p>为了更好的管理流程，我们自由（loosely）遵循一些领域驱动模型开发原则。即，我们在<code>app</code>目录下添加<code>processes</code>文件夹，用于支持（hold）我们对过程的实现。
+
+</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="string">|-project</span></div><div class="line">  <span class="string">|-app</span></div><div class="line">    <span class="string">|-assets</span></div><div class="line">    <span class="string">|-controllers</span></div><div class="line">    <span class="string">|-helpers</span></div><div class="line">    <span class="string">|-mailers</span></div><div class="line">    <span class="string">|-models</span></div><div class="line">    <span class="string">|-processes &lt;-----</span></div><div class="line">    <span class="string">|-views</span></div></code></pre></td></tr></table></figure>
+
+<p>We recommend using a tool like <a href="https://github.com/hopsoft/hero">Hero</a> to help model these processes.
+
+</p>
+<p>我们推荐使用类似<a href="https://github.com/hopsoft/hero">Hero</a>的工具来帮助我们对这些过程建模。
+
+</p>
+<p><strong>Important</strong> <em>Do not use model or controller callbacks to invoke a process. Instead, invoke processes directly from the controller.</em>
+
+</p>
+<p><strong>重要</strong> <em>不要通过模型或者控制器回调去调用过程。而应该取而代之的直接在控制器中调用。</em>
+
+</p>
+<h2>Logging</h2>
+<h2>日志</h2>
+<p>We use the <a href="https://github.com/rudionrails/yell">Yell gem</a> for logging. 
+Here is an example configuration.
+
+</p>
+<p>我们使用 <a href="https://github.com/rudionrails/yell">Yell gem</a> 进行日志记录。下面是一份配置范例。
+
+</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div><div class="line-number">8</div><div class="line-number">9</div><div class="line-number">10</div><div class="line-number">11</div><div class="line-number">12</div><div class="line-number">13</div><div class="line-number">14</div><div class="line-number">15</div><div class="line-number">16</div><div class="line-number">17</div><div class="line-number">18</div><div class="line-number">19</div><div class="line-number">20</div><div class="line-number">21</div><div class="line-number">22</div><div class="line-number">23</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="comment"># example/config/application.rb </span></div><div class="line"><span class="class"><span class="keyword">module</span> <span class="title">Example</span></span></div><div class="line">  <span class="class"><span class="keyword">class</span> <span class="title">Application</span> &<span class="title">lt</span>;</span> <span class="constant">Rails::Application</span></div><div class="line">    log_levels = [<span class="symbol">:debug</span>, <span class="symbol">:info</span>, <span class="symbol">:warn</span>, <span class="symbol">:error</span>, <span class="symbol">:fatal</span>]</div><div class="line">    </div><div class="line">    <span class="comment"># %m : The message to be logged</span></div><div class="line">    <span class="comment"># %d : The ISO8601 Timestamp</span></div><div class="line">    <span class="comment"># %L : The log level, e.g INFO, WARN</span></div><div class="line">    <span class="comment"># %l : The log level (short), e.g. I, W</span></div><div class="line">    <span class="comment"># %p : The PID of the process from where the log event occured</span></div><div class="line">    <span class="comment"># %t : The Thread ID from where the log event occured</span></div><div class="line">    <span class="comment"># %h : The hostname of the machine from where the log event occured</span></div><div class="line">    <span class="comment"># %f : The filename from where the log event occured</span></div><div class="line">    <span class="comment"># %n : The line number of the file from where the log event occured</span></div><div class="line">    <span class="comment"># %F : The filename with path from where the log event occured</span></div><div class="line">    <span class="comment"># %M : The method where the log event occured</span></div><div class="line">    log_format = <span class="constant">Yell</span>.format( <span class="string">"[%d] [%L] [%h][%p][%t] [%F:%n:%M] %m"</span>)</div><br><div class="line">    config.logger = <span class="constant">Yell</span>.new <span class="keyword">do</span> |logger|</div><div class="line">      logger.adapter <span class="constant">STDOUT</span>, <span class="symbol">:level</span> =&gt; log_levels, <span class="symbol">:format</span> =&gt; log_format </div><div class="line">    <span class="keyword">end</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div></code></pre></td></tr></table></figure>
+
+
+<h2>Extensions &amp; Monkey Patches</h2>
+<h2>扩展和猴子补丁</h2>
+<ul>
+<li>Be thoughtful about monkey patching and look for alternative solutions first.</li>
+<li><p>Use an <code>initializer</code> to load extensions &amp; monkey patches.</p>
+</li>
+<li><p>仔细斟酌是否需要使用猴子补丁，首先应该考虑是否有能够替代的解决方案。</p>
+</li>
+<li>使用初始化程序（<code>initializer</code>）载入扩展和猴子补丁。</li>
+</ul>
+<p>All extensions &amp; monkey patches should live under an <code>extensions</code> directory in <code>lib</code>.
+
+</p>
+<p>所有的扩展和猴子补丁都应该存放在<code>lib</code>目录下的<code>extensions</code>文件夹中。
+
+</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="string">|-project</span></div><div class="line">  <span class="string">|-app</span></div><div class="line">  <span class="string">|-config</span></div><div class="line">  <span class="string">|-db</span></div><div class="line">  <span class="string">|-lib</span></div><div class="line">    <span class="string">|-extensions &lt;-----</span></div></code></pre></td></tr></table></figure>
+
+<p>Use modules to extend objects or add monkey patches.
+<em>This provides some introspection assistance when you need to track down weirdness.</em>
+
+</p>
+<p>采用模块的方式扩展对象或添加猴子补丁。<em>这能够在你跟踪异常的时候为你提供一些自省的帮助</em>
+
+</p>
+<p>Here&#39;s an example:
+
+</p>
+<p>下面是一个例子：
+
+</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><code><div class="line-number">1</div><div class="line-number">2</div><div class="line-number">3</div><div class="line-number">4</div><div class="line-number">5</div><div class="line-number">6</div><div class="line-number">7</div></code></pre></td><td class="code"><pre><code><div class="line"><span class="class"><span class="keyword">module</span> <span class="title">CowboyString</span></span></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">downcase</span></span></div><div class="line">    <span class="keyword">self</span>.upcase</div><div class="line">  <span class="keyword">end</span></div><div class="line"><span class="keyword">end</span></div><div class="line"><span class="constant">::String</span>.send(<span class="symbol">:include</span>, <span class="constant">CowboyString</span>)</div><div class="line"><span class="constant">String</span>.ancestors <span class="comment"># =&gt; [String, CowboyString, Enumerable, Comparable, Object, Kernel]</span></div></code></pre></td></tr></table></figure>
+      
+    </div>
+    <footer>
+      
+        
+        
+        <div class="alignright">
+          <a href="http://xiongbo.me/2013/01/24/2013-01-27-Rails-3.2-Development-Standards-Guide/#disqus_thread" class="comment-link">Comments</a>
+        </div>
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+  
+    <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2013-01-08T06:33:06.000Z"><a href="/2013/01/08/2013-01-08-start-blog-with-hexo/">Jan 8, 2013</a></time>
       
       
@@ -380,11 +634,15 @@
   
     <li><a href="/tags/dwz/">dwz</a><small>1</small></li>
   
+    <li><a href="/tags/guide/">guide</a><small>1</small></li>
+  
     <li><a href="/tags/j-ui/">j-ui</a><small>1</small></li>
   
     <li><a href="/tags/mvc3/">mvc3</a><small>1</small></li>
   
     <li><a href="/tags/project/">project</a><small>1</small></li>
+  
+    <li><a href="/tags/rails/">rails</a><small>1</small></li>
   
     <li><a href="/tags/reading-notes/">reading-notes</a><small>3</small></li>
   
